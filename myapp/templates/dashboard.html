@@ -1,0 +1,266 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'assets/images/favicon.ico' %}">
+
+
+
+    <title>Pearl Admin - Dashboard</title>
+
+    <!-- Style-->
+    <link rel="stylesheet" href="{% static 'assets/vendor_components/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/skin_color.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/coustom.css' %}">
+
+
+    <!--Plugin-->
+    <link rel="stylesheet" href="{% static 'assets/vendor_components/morris.js/morris.css' %}">
+
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-blackberry">
+
+    <div class="wrapper">
+
+        <header class="main-header">
+            <div class="d-flex align-items-center ml-5">
+                <a href="#" class="waves-effect waves-light nav-link rounded d-none d-md-inline-block"
+                    data-toggle="push-menu" role="button">
+                    <i class="nav-link-icon mdi mdi-menu text-white"></i>
+                </a>
+                <!-- Logo -->
+                <a href="#" class="logo">
+                    <!-- logo-->
+                    <div class="logo-lg">
+                        <span class="light-logo"><img src="{% static 'assets/images/logo-light-text.png' %}" alt="logo"></span>
+                        <span class="dark-logo"><img src="{% static 'assets/images/logo-dark-text.png' %}" alt="logo"></span>
+                    </div>
+                </a>
+            </div>
+            <!-- Header Navbar -->
+            <nav class="navbar navbar-static-top">
+                <!-- Sidebar toggle button-->
+                <div class="app-menu">
+                    <ul class="header-megamenu nav">
+                        <li class="btn-group nav-item d-md-none">
+                            <a href="#" class="waves-effect waves-light nav-link rounded" data-toggle="push-menu"
+                                role="button">
+                                <i class="nav-link-icon mdi mdi-menu text-white"></i>
+                            </a>
+                        </li>
+                        <li class="btn-group nav-item">
+                            <a href="#" data-provide="fullscreen" class="waves-effect waves-light nav-link rounded"
+                                title="Full Screen">
+                                <i class="nav-link-icon mdi mdi-crop-free text-white"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="navbar-custom-menu r-side">
+                    <ul class="nav navbar-nav">
+                        <!-- User Account-->
+                        <li class="dropdown user user-menu">
+                            <a href="#" class="waves-effect waves-light dropdown-toggle p-5" data-toggle="dropdown"
+                                title="User">
+                                <img src="{% static 'assets/images/avatar/9.jpg' %}" class="rounded" alt="" />
+                            </a>
+                            <ul class="dropdown-menu animated flipInX">
+                                <!-- User image -->
+                                <li class="user-header bg-img" style="background-image: url(assets/images/user-info.jpg)"
+                                    data-overlay="3">
+                                    <div class="flexbox align-self-center">
+                                        <img src="{% static 'assets/images/avatar/7.jpg' %}" class="float-left rounded-circle"
+                                            alt="User Image">
+                                        <h4 class="user-name align-self-center">
+                                            <span>Samuel Brus</span>
+                                            <small>samuel@gmail.com</small>
+                                        </h4>
+                                    </div>
+                                </li>
+                                <!-- Menu Body -->
+                                <li class="user-body">
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-person"></i>Workspace User</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-sliders"></i> Workspace Praferences</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-gear"></i>Integrations</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-dashboard"></i>Agency Dashboard</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion-log-out"></i>Logout</a>
+                                    <div class="dropdown-divider"></div>
+                                    <div class="p-10"><a href="javascript:void(0)"class="btn btn-sm btn-rounded btn-success">View Profile</a></div>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <!-- Left side column. contains the logo and sidebar -->
+        <aside class="main-sidebar">
+            <!-- sidebar-->
+            <section class="sidebar">
+                <!-- sidebar menu-->
+                <ul class="sidebar-menu" data-widget="tree">
+
+
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="mdi mdi-minus-network"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{% url 'logout' %}">
+                            <i class="mdi mdi-export"></i>
+                            <span>Log Out</span>
+                        </a>
+                    </li>
+
+                    <li class="header line"></li>
+
+                </ul>
+            </section>
+        </aside>
+
+        <!-- Content Wrapper. Contains page content -->
+        <div class="content-wrapper">
+            <div class="container-full">
+                <!-- Content Header (Page header) -->
+                <div class="content-header">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-auto">
+                            <h3 class="page-title">Dashboard</h3>
+                            <div class="d-inline-block align-items-center">
+                                <nav>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Main content -->
+                <section class="content">
+                    <div class="row">
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body bg-insta">
+                                        <img src="{% static 'assets/images/icon/instagram.png' %}" alt="Instagram" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>Instagram</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body fb-bg">
+                                        <img src="{% static 'assets/images/icon/facebook.png' %}" alt="Facebook" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>Facebook</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body bg-linkedin">
+                                        <img src="{% static 'assets/images/icon/linkedin.png' %}" alt="LinkedIn" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>LinkedIn</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body bg-tiktok">
+                                        <img src="{% static 'assets/images/icon/tiktok.png' %}" alt="TikTok" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>TikTok</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body bg-twitter">
+                                        <img src="{% static 'assets/images/icon/twitter.png' %}" alt="Twitter" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>Twitter</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="col-xl-2 col-lg-4 col-12">
+                            <a href="login.html">
+                                <div class="box">
+                                    <div class="box-body bg-snapchat">
+                                        <img src="{% static 'assets/images/icon/snapchat.png' %}" alt="Snapchat" height="28" class="me-3 rounded">
+                                        <div class="d-flex justify-content-between align-items-center mt-10">
+                                            <h4 class="mb-0 text-white"><b>Snapchat</b></h4>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </section>
+                <!-- /.content -->
+            </div>
+        </div>
+      
+        <div class="control-sidebar-bg"></div>
+    </div>
+    <!-- ./wrapper -->
+
+
+
+    <!-- js -->
+    <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
+    <script src="assets/vendor_components/screenfull/screenfull.js"></script>
+    <script src="assets/vendor_components/popper/dist/popper.min.js"></script>
+    <script src="assets/vendor_components/bootstrap/dist/js/bootstrap.js"></script>
+    <script src="assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <script src="assets/vendor_components/fastclick/lib/fastclick.js"></script>
+
+    <!--Plugin-->
+    <script src="assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js"></script>
+    <script src="assets/vendor_components/zingchart_branded_version/zingchart.min.js"></script>
+    <script src="assets/vendor_components/apexcharts-bundle/irregular-data-series.js"></script>
+    <script src="assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
+    <script src="assets/vendor_components/raphael/raphael.min.js"></script>
+    <script src="assets/vendor_components/morris.js/morris.min.js"></script>
+
+    <!-- Pearl Admin App -->
+    <script src="assets/js/template.js"></script>
+    <script src="assets/js/pages/dashboard.js"></script>
+    <script src="assets/js/demo.js"></script>
+
+
+</body>
+
+</html>

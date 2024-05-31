@@ -1,0 +1,45 @@
+.main-header {
+    background-image: linear-gradient(45deg, #843cf7, #2444e8) !important;
+}
+.bg-insta {
+    background: linear-gradient(115deg, #f9ce34, #ee2a7b, #6228d7)
+}
+.fb-bg {
+    background-color: #1778f2;
+}
+.bg-linkedin {
+    background-color: #0077b5 !important;
+}
+.bg-tiktok {
+    background-color: #000000;
+}
+.bg-twitter {
+    background-color: #1da1f2 !important;
+}
+.bg-snapchat {
+    background-color: #FFD700;
+}
+.col-icon{
+    color: #fff;
+    font-size: 40px;
+}
+.col-flex{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.col-nave-link{
+    padding: 10px;
+    font-size: 17px;
+    font-weight: 600;
+    color:#000;
+}
+.btn-coustom{
+    border: solid 2px #fff;
+    color: #fff;
+}
+.btn-coustom:hover{
+    border: solid 2px #fff;
+    color: #000;
+    background-color: #fff;
+}
