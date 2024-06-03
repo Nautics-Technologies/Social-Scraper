@@ -33,9 +33,11 @@
                     <i class="nav-link-icon mdi mdi-menu text-white"></i>
                 </a>
                 <a href="#" class="logo">
-                    <div class="logo-lg"> 
-                        <span class="light-logo"><img src="{% static 'assets/images/logo-light-text.png' %}" alt="logo"></span>
-                        <span class="dark-logo"><img src="{% static 'assets/images/logo-dark-text.png' %}" alt="logo"></span>
+                    <div class="logo-lg">
+                        <span class="light-logo"><img src="{% static 'assets/images/logo-light-text.png' %}"
+                                alt="logo"></span>
+                        <span class="dark-logo"><img src="{% static 'assets/images/logo-dark-text.png' %}"
+                                alt="logo"></span>
                     </div>
                 </a>
             </div>
@@ -66,10 +68,10 @@
                             </a>
                             <ul class="dropdown-menu animated flipInX">
                                 <li class="user-header bg-img"
-                                    style="background-image: url(assets/images/user-info.jpg)" data-overlay="3">
-                                    <div class="flexbox align-self-center">
-                                        <img src="{% static 'assets/images/avatar/7.jpg' %}" class="float-left rounded-circle"
-                                            alt="User Image">
+                                    style="background-image: url('{% static 'assets/images/user-info.jpg' %}')" data-overlay="3">
+                                    <div class="flexbox align-self-center">  
+                                        <img src="{% static 'assets/images/avatar/7.jpg' %}"
+                                            class="float-left rounded-circle" alt="User Image">
                                         <h4 class="user-name align-self-center">
                                             <span>Samuel Brus</span>
                                             <small>samuel@gmail.com</small>
@@ -103,13 +105,13 @@
             <section class="sidebar">
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="treeview">
-                        <a href="#">
+                        <a href="{% url 'home' %}">
                             <i class="mdi mdi-minus-network"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="auth_login.html">
+                        <a href="{% url 'logout' %}">
                             <i class="mdi mdi-export"></i>
                             <span>Log Out</span>
                         </a>
@@ -150,35 +152,42 @@
                                         <div class="widget-user-image">
                                             <i class="fa fa-instagram col-icon" aria-hidden="true"></i>
                                         </div>
-                                        <button class="btn btn-coustom"><i class="ti-plus"></i> Add Account</button>
+                                        <button class="btn btn-coustom" data-toggle="modal"
+                                            data-target="#modal-center"><i class="ti-plus"></i> Add Account</button>
                                     </div>
                                 </div>
                                 <div class="box-footer no-padding">
                                     <div class="box box-widget widget-user">
-                                        <div class="flexbox align-items-center p-10">
-                                            <img class="avatar avatar-lg" src="{% static 'assets/images/avatar/2.jpg' %}" alt="...">
-                                            <div class="">
-                                                <h5 class="mb-0"><b>Kevin Black</b></h5>
+                                        <div class="flexbox align-items-center justify-content-between p-10">
+                                            <div class="row align-items-center">
+                                                <img class="avatar avatar-lg" src="{% static 'assets/images/avatar/2.jpg' %}"
+                                                    alt="...">
+                                                <h5 class="mb-0 pl-5"><b>{{ profile.username|default:"Kevin Black" }}</b></h5>
+                                            </div>
+                                            <div>
+                                                <button class="btn add-btn" data-toggle="modal"
+                                                    data-target=".bs-example-modal-lg"><i class="fa fa-eye"></i> View
+                                                    Details</button>
                                             </div>
                                         </div>
                                         <div class="box-footer">
                                             <div class="row">
                                                 <div class="col-sm-4">
                                                     <div class="description-block">
-                                                        <h5 class="description-header">12K</h5>
+                                                        <h5 class="description-header">{{ profile.followers|default:"12K" }}</h5>
                                                         <span class="description-text">FOLLOWERS</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 br-1 bl-1">
                                                     <div class="description-block">
-                                                        <h5 class="description-header">550</h5>
-                                                        <span class="description-text">FOLLOWERS</span>
+                                                        <h5 class="description-header">{{ profile.followees|default:"550" }}</h5>
+                                                        <span class="description-text">FOLLOWINGS</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="description-block">
-                                                        <h5 class="description-header">158</h5>
-                                                        <span class="description-text">TWEETS</span>
+                                                        <h5 class="description-header">{{ profile.total_posts|default:"158" }}</h5>
+                                                        <span class="description-text">Posts</span>
                                                     </div>
                                                 </div>
                                             </div>
@@ -198,10 +207,14 @@
                                         <button class="btn btn-coustom"><i class="ti-plus"></i> Add Account</button>
                                     </div>
                                 </div>
+
+
+
                                 <div class="box-footer no-padding">
                                     <div class="box box-widget widget-user">
                                         <div class="flexbox align-items-center p-10">
-                                            <img class="avatar avatar-lg" src="{% static 'assets/images/avatar/2.jpg' %}" alt="...">
+                                            <img class="avatar avatar-lg"
+                                                src="{% static 'assets/images/avatar/2.jpg' %}" alt="...">
                                             <div class="">
                                                 <h5 class="mb-0"><b>Kevin Black</b></h5>
                                             </div>
@@ -210,50 +223,169 @@
                                             <div class="row">
                                                 <div class="col-sm-4">
                                                     <div class="description-block">
-                                                        <h5 class="description-header">12K</h5>
+                                                        <h5 class="description-header">12K </h5>
                                                         <span class="description-text">FOLLOWERS</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4 br-1 bl-1">
                                                     <div class="description-block">
                                                         <h5 class="description-header">550</h5>
-                                                        <span class="description-text">FOLLOWERS</span>
+                                                        <span class="description-text">FOLLOWINGS</span>
                                                     </div>
                                                 </div>
                                                 <div class="col-sm-4">
                                                     <div class="description-block">
                                                         <h5 class="description-header">158</h5>
-                                                        <span class="description-text">TWEETS</span>
+                                                        <span class="description-text">POSTS</span>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
+
+
+                                
                             </div>
                         </div>
                     </div>
                 </section>
             </div>
         </div>
+        
+
 
         <div class="control-sidebar-bg"></div>
+
+
+        <!-- test -->
+
+        <div class="modal center-modal fade" id="modal-center" tabindex="-1">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+
+                    <form method="POST" action="{% url 'integration' %}">
+                        {% csrf_token %}
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <h5>User Name <span class="text-danger">*</span></h5>
+                                <div class="controls">
+                                    <input type="text" name="user_name" class="form-control" required>
+                                    <div class="help-block"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer modal-footer-uniform">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn add-btn float-right"><i class="ti-plus"></i>Submit</button>
+                        </div>
+                    </form>
+                    
+
+                </div>
+            </div>
+        </div>
+
+        <div class="modal fade bs-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+            aria-hidden="true" style="display: none;">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="col-12">
+                            <table class="table" cellpadding="6" cellspacing="0" border="0"
+                                style="padding-left:50px; width:100%;">
+                                <tbody>
+                                    <tr>
+                                        <td style="width:22%"><strong>FullName:</strong></td>
+                                        <td>{{ profile.name }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Profile PicUrl:</strong></td>
+                                        <td><img src="{% static 'assets/images/gallery/landscape6.jpg' %}" height="50" class="mx-0"
+                                                alt="..."></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>User Name:</strong></td>
+                                        <td>{{ profile.username }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Posts Count:</strong></td>
+                                        <td>{{ profile.total_posts }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Followers Count:</strong></td>
+                                        <td>{{ profile.followers }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Follows Count:</strong></td>
+                                        <td>{{ profile.followees }}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Private:</strong></td>
+                                        <td><button class="btn btn-xs btn-danger" style="margin-left:5px">{{ profile.is_private }}</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Verified:</strong></td>
+                                        <td><button class="btn btn-xs btn-success"
+                                                style="margin-left:5px">{{ profile.is_verified }}</button></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>isBusiness Account:</strong></td>
+                                        <td><button class="btn btn-xs btn-danger" style="margin-left:5px">{{ profile.is_business_account }}</button>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="width:22%"><strong>Biography:</strong></td>
+                                        <td>{{ profile.biography }}</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-danger btn-rounded text-left"
+                            data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- test -->
+
+
     </div>
-    <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
-    <script src="assets/vendor_components/screenfull/screenfull.js"></script>
-    <script src="assets/vendor_components/popper/dist/popper.min.js"></script>
-    <script src="assets/vendor_components/bootstrap/dist/js/bootstrap.js"></script>
-    <script src="assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js"></script>
-    <script src="assets/vendor_components/fastclick/lib/fastclick.js"></script>
-    <script src="assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js"></script>
-    <script src="assets/vendor_components/zingchart_branded_version/zingchart.min.js"></script>
-    <script src="assets/vendor_components/apexcharts-bundle/irregular-data-series.js"></script>
-    <script src="assets/vendor_components/apexcharts-bundle/dist/apexcharts.js"></script>
-    <script src="assets/vendor_components/raphael/raphael.min.js"></script>
-    <script src="assets/vendor_components/morris.js/morris.min.js"></script>
-    <script src="assets/js/template.js"></script>
-    <script src="assets/js/pages/dashboard.js"></script>
-    <script src="assets/js/demo.js"></script>
+
+
+
+    <script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/fastclick/lib/fastclick.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/zingchart_branded_version/zingchart.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/morris.js/morris.min.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+    <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/demo.js' %}"></script>
+
+
+
+
+
 
 </body>
 

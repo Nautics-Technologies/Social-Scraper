@@ -4,12 +4,9 @@ from .forms import SignupForm, LoginForm
 from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
+import instaloader
+import json
 
-
-
-
-from django.shortcuts import render, redirect
-from .forms import SignupForm
 
 def user_signup(request):
     if request.method == 'POST':
@@ -52,19 +49,44 @@ def login_view(request):
 
 @login_required(login_url="/")
 def home(request):
+
     return render(request, 'dashboard.html')
 
 @login_required(login_url="/")
 def integration(request):
+    if request.method == 'POST':
+        user_name = request.POST.get('user_name')
+        profile_info_json = get_instagram_profile_info(user_name)
+        return render(request, 'integration.html', {'profile': profile_info_json})
     return render(request, 'integration.html')
-
-
 
 
 # logout page
 def user_logout(request):
     logout(request)
     return redirect('login')
+
+
+def get_instagram_profile_info(username):
+    L = instaloader.Instaloader()
+
+    try:
+        profile = instaloader.Profile.from_username(L.context, username)
+        profile_info = {
+            "username": profile.username,
+            "user_id": profile.userid,
+            "name": profile.full_name,
+            "total_posts": profile.mediacount,
+            "followers": profile.followers,
+            "followees": profile.followees,
+            "biography": profile.biography,
+            "is_private": profile.is_private,
+            "is_verified": profile.is_verified,
+            "is_business_account": profile.is_business_account
+        }
+        return profile_info
+    except Exception as e:
+        return {"error": str(e)}
 
 
 
