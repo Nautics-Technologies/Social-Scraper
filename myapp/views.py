@@ -8,6 +8,7 @@ import instaloader
 import json
 
 
+
 def user_signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
@@ -21,9 +22,6 @@ def user_signup(request):
 
 
 
-from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login
-from django.http import HttpResponse
 
 def login_view(request):
     if request.method == 'POST':
