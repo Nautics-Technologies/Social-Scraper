@@ -2,11 +2,11 @@ from django.urls import path
 from . import views
 from django.contrib.auth import views as auth_views
 
-from django.urls import reverse_lazy
+# from django.urls import reverse_lazy
 
-LOGIN_URL = reverse_lazy('login')
-LOGOUT_URL = reverse_lazy('logout')
-LOGIN_REDIRECT_URL = reverse_lazy('')
+# LOGIN_URL = reverse_lazy('login')
+# LOGOUT_URL = reverse_lazy('logout')
+# LOGIN_REDIRECT_URL = reverse_lazy('')
 
 urlpatterns = [
     path('home/', views.home, name='home'),

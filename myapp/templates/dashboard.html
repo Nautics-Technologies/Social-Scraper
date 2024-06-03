@@ -90,7 +90,7 @@
                                 <li class="user-body">
                                     <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-person"></i>Workspace User</a>
                                     <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-sliders"></i> Workspace Praferences</a>
-                                    <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-gear"></i>Integrations</a>
+                                    <a class="dropdown-item" href="{% url 'integration' %}"><i class="fa fa-gear"></i>Integrations</a>
                                     <a class="dropdown-item" href="javascript:void(0)"><i class="fa fa-dashboard"></i>Agency Dashboard</a>
                                     <div class="dropdown-divider"></div>
                                     <a class="dropdown-item" href="javascript:void(0)"><i class="ion-log-out"></i>Logout</a>
@@ -113,7 +113,7 @@
 
 
                     <li class="treeview">
-                        <a href="#">
+                        <a href="{% url 'home' %}">
                             <i class="mdi mdi-minus-network"></i>
                             <span>Dashboard</span>
                         </a>
@@ -142,7 +142,7 @@
                             <div class="d-inline-block align-items-center">
                                 <nav>
                                     <ol class="breadcrumb">
-                                        <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a>
+                                        <li class="breadcrumb-item"><a href="{% url 'home' %}"><i class="mdi mdi-home-outline"></i></a>
                                         </li>
                                         <li class="breadcrumb-item active" aria-current="page">Dashboard</li>
                                     </ol>
@@ -240,14 +240,28 @@
 
 
     <!-- js -->
-    <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
+    <!-- <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
     <script src="assets/vendor_components/screenfull/screenfull.js"></script>
     <script src="assets/vendor_components/popper/dist/popper.min.js"></script>
     <script src="assets/vendor_components/bootstrap/dist/js/bootstrap.js"></script>
     <script src="assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js"></script>
-    <script src="assets/vendor_components/fastclick/lib/fastclick.js"></script>
+    <script src="assets/vendor_components/fastclick/lib/fastclick.js"></script> -->
+
+  
+
+    <script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/fastclick/lib/fastclick.js' %}"></script>
+
+
+
+
 
     <!--Plugin-->
+
     <!-- <script src="assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js"></script>
     <script src="assets/vendor_components/zingchart_branded_version/zingchart.min.js"></script>
     <script src="assets/vendor_components/apexcharts-bundle/irregular-data-series.js"></script>
@@ -259,7 +273,7 @@
 
 
     <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
-    <script src=" {% static 'assets/vendor_components/zingchart_branded_version/zingchart.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/zingchart_branded_version/zingchart.min.js' %}"></script>
     <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
     <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
     <script src="{% static 'assets/vendor_components/raphael/raphael.min.js' %}"></script>

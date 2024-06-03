@@ -15,6 +15,7 @@
     <title>Admin - Log in </title>
   
 	<!-- Bootstrap 4.0-->
+
 	<link rel="stylesheet" href="{% static 'assets/vendor_components/bootstrap/dist/css/bootstrap.min.css' %}">
 	
 	<!-- theme style -->
@@ -24,11 +25,13 @@
 	<link rel="stylesheet" href="{% static 'assets/css/skin_color.css' %}">	
 
 </head>
-<body class="hold-transition theme-blackberry bg-img" style="background-image: url(myproject/myapp/static/assets/images/auth-bg/banner.jpg)" data-overlay="3">
+
+<body class="hold-transition theme-blackberry bg-img" style="background-image: url('{% static 'assets/images/auth-bg/banner.jpg' %}')" data-overlay="3">
+
 	
 	<div class="auth-2-outer row align-items-center h-p100 m-0">
-		<div class="auth-2 bg-img" style="background-image: url(myproject/myapp/static/assets/images/auth-bg/bg-2.jpg)" data-overlay="2">
-		  <div class="auth-logo font-size-30">
+		<div class="auth-2 bg-img" style="background-image: url('{% static 'assets/images/auth-bg/bg-2.jpg' %}')" data-overlay="2">
+		  <div class="auth-logo font-size-30">   
 			<a href="#" class="text-white">Welcome to <b>Social Scraper!</b></a>
 		  </div>
 		  <!-- /.login-logo -->
@@ -91,16 +94,18 @@
 	
 
 	<!-- jQuery 3 -->
-	<script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
+	<script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
 	
 	<!-- fullscreen -->
-	<script src="assets/vendor_components/screenfull/screenfull.js"></script>
+	<script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
 	
 	<!-- popper -->
-	<script src="assets/vendor_components/popper/dist/popper.min.js"></script>
+	<script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
 	
 	<!-- Bootstrap 4.0-->
-	<script src="assets/vendor_components/bootstrap/dist/js/bootstrap.min.js"></script>
+	<script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+
+	
 
 </body>
 </html>

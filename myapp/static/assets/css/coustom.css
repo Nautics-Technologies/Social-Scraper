@@ -43,3 +43,18 @@
     color: #000;
     background-color: #fff;
 }
+.add-btn{
+    color:#007bff !important;
+    border: solid 2px #007bff !important;
+}
+.add-btn:hover{
+    color:#fff;
+    border: solid 2px #007bff;
+    background-color: #007bff;
+}
+.table tr td {
+    border-bottom: 0px solid #f0f0f0;
+}
+.table th, .table td {
+    border: 1px solid #dee2e6;
+}
