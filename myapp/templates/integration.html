@@ -103,13 +103,13 @@
             <section class="sidebar">
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="treeview">
-                        <a href="#">
+                        <a href="{% url 'home' %}">
                             <i class="mdi mdi-minus-network"></i>
                             <span>Dashboard</span>
                         </a>
                     </li>
                     <li>
-                        <a href="auth_login.html">
+                        <a href="{% url 'logout' %}">
                             <i class="mdi mdi-export"></i>
                             <span>Log Out</span>
                         </a>
@@ -239,7 +239,7 @@
 
         <div class="control-sidebar-bg"></div>
     </div>
-    <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
+    <!-- <script src="assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js"></script>
     <script src="assets/vendor_components/screenfull/screenfull.js"></script>
     <script src="assets/vendor_components/popper/dist/popper.min.js"></script>
     <script src="assets/vendor_components/bootstrap/dist/js/bootstrap.js"></script>
@@ -253,7 +253,31 @@
     <script src="assets/vendor_components/morris.js/morris.min.js"></script>
     <script src="assets/js/template.js"></script>
     <script src="assets/js/pages/dashboard.js"></script>
-    <script src="assets/js/demo.js"></script>
+    <script src="assets/js/demo.js"></script> -->
+
+
+ 
+
+    <script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-slimscroll/jquery.slimscroll.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/fastclick/lib/fastclick.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/zingchart_branded_version/zingchart.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/irregular-data-series.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/apexcharts-bundle/dist/apexcharts.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/raphael/raphael.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/morris.js/morris.min.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+    <script src="{% static 'assets/js/pages/dashboard.js' %}"></script>
+    <script src="{% static 'assets/js/demo.js' %}"></script>
+
+
+
+
+
 
 </body>
 
