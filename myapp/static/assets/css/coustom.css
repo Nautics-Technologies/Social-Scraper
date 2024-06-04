@@ -44,8 +44,8 @@
     background-color: #fff;
 }
 .add-btn{
-    color:#007bff !important;
-    border: solid 2px #007bff !important;
+    color:#007bff;
+    border: solid 2px #007bff;
 }
 .add-btn:hover{
     color:#fff;
