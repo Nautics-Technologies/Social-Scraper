@@ -791,17 +791,17 @@ Theme blackberry Color
 .theme-blackberry .hover-success:hover, .theme-blackberry .hover-success:focus {
   color: #45b6c6 !important; }
 .theme-blackberry .text-danger {
-  color: #ec4b71 !important; }
+  color: #7367f0 !important; }
 .theme-blackberry a.text-danger:hover, .theme-blackberry a.text-danger:focus {
-  color: #ec4b71 !important; }
+  color: #7367f0 !important; }
 .theme-blackberry .hover-danger:hover, .theme-blackberry .hover-danger:focus {
-  color: #ec4b71 !important; }
+  color: #7367f0 !important; }
 .theme-blackberry .text-warning {
-  color: #f7cc05 !important; }
+  color: #7367f0 !important; }
 .theme-blackberry a.text-warning:hover, .theme-blackberry a.text-warning:focus {
-  color: #f7cc05 !important; }
+  color: #7367f0 !important; }
 .theme-blackberry .hover-warning:hover, .theme-blackberry .hover-warning:focus {
-  color: #f7cc05 !important; }
+  color: #7367f0 !important; }
 
 /*---active background---*/
 .theme-blackberry .active.active-primary {
@@ -1373,7 +1373,7 @@ Theme blackberry Color
   .theme-blackberry .form-element .form-control:focus {
     background-image: linear-gradient(45deg, #843cf7, #2444e8), linear-gradient(#a6b7cd, #a6b7cd); }
 .theme-blackberry .form-control:focus {
-  border-color: #843cf7; }
+  border-color: #7367f0; }
 .theme-blackberry [type=checkbox]:checked.chk-col-primary + label:before {
   border-right: 2px solid #843cf7;
   border-bottom: 2px solid #843cf7; }

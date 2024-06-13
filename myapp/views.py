@@ -22,7 +22,6 @@ def user_signup(request):
 
 
 
-
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -47,16 +46,21 @@ def login_view(request):
 
 @login_required(login_url="/")
 def home(request):
+    return render(request, 'Dashboard.html')
 
-    return render(request, 'dashboard.html')
 
 @login_required(login_url="/")
 def integration(request):
     if request.method == 'POST':
         user_name = request.POST.get('user_name')
+        print(user_name)
         profile_info_json = get_instagram_profile_info(user_name)
+        print(profile_info_json)
         return render(request, 'integration.html', {'profile': profile_info_json})
     return render(request, 'integration.html')
+
+def forgot_password(request):
+    return render(request, 'forgot-password.html')
 
 
 # logout page
@@ -85,8 +89,5 @@ def get_instagram_profile_info(username):
         return profile_info
     except Exception as e:
         return {"error": str(e)}
-
-
-
 
 
