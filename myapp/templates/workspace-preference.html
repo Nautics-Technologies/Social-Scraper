@@ -16,8 +16,6 @@
 	<link rel="stylesheet" href="{% static 'assets/css/skin_color.css' %}">
 	<link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
 
-	    <!-- Style-->
-
 </head>
 
 <body class="hold-transition light-skin sidebar-mini theme-blackberry">
@@ -72,7 +70,7 @@
 										Workspace Users</a>
 									<a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-bag"></i>
 										Workspace Preferences</a>
-									<a class="dropdown-item" href="{% url 'integration' %}"><i
+									<a class="dropdown-item" href="javascript:void(0)"><i
 											class="ion ion-email-unread"></i> Integrations</a>
 									<div class="dropdown-divider"></div>
 									<a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-settings"></i>
@@ -92,7 +90,7 @@
 			<section class="sidebar">
 				<ul class="sidebar-menu" data-widget="tree">
 					<li class="treeview">
-						<a href="{% url 'home' %}">
+						<a href="#">
 							<i class="mdi mdi-minus-network"></i>
 							<span>Dashboard</span>
 						</a>
@@ -124,99 +122,15 @@
 				<section class="content">
 					<div class="row">
 
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-facebook justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/facebook.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-							<div class="media bg-white mb-20">
-								<span class="avatar status-success">
-									<img class="avatar" src="{% static 'assets/images/avatar.png' %}" alt="...">
-								</span>
-								
-								<div class="media-body">
-									<p><strong>Johen Doe</strong> <time class="float-right"
-											datetime="2017-07-14 20:00">24 min ago</time></p>
-									<div class="d-inline-block pull-right mt-10">
-										<button type="button"
-											class="btn btn-rounded btn-sm btn-danger m-5">Delete</button>
-									</div>
-								</div>
-							</div>
-						</div> -->
-
 						<div class="col-md-4 col-12">
 							<div class="media align-items-center bg-instagram mb-20 justify-content-between">
 								<img class="avatar" src="{% static 'assets/images/new-img/instagram.png' %}" alt="...">
 								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
+									<a class="btn btn-block btn-outline text-white btn-transparent" href="#"
+										data-toggle="modal" data-target="#modal-center">+ Add Account</a>
 								</div>
 							</div>
 						</div>
-
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-tiktok mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/tiktok.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
-<!-- 
-						<div class="col-md-4 col-12">
-							<div class="media align-items-center bg-linkedin mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/linkedin.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
-
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-twitter mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/twitter.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
-
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-youtube mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/youtube.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
-
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-gmb mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/gmb.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
-
-						<!-- <div class="col-md-4 col-12">
-							<div class="media align-items-center bg-pintrest mb-20 justify-content-between">
-								<img class="avatar" src="{% static 'assets/images/new-img/pintrest.png' %}" alt="...">
-								<div>
-									<a class="btn btn-block btn-outline text-white btn-transparent" href="#">+ Add
-										Account</a>
-								</div>
-							</div>
-						</div> -->
 					</div>
 				</section>
 			</div>
@@ -224,7 +138,109 @@
 
 		<div class="control-sidebar-bg"></div>
 	</div>
-    <script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
+	<div class="modal center-modal fade" id="modal-center" tabindex="-1">
+		<div class="modal-dialog">
+			<div class="modal-content br-5">
+				<div class="modal-header bg-instagram">
+					<h4 class="modal-title text-white"><img class="avatar" src="{% static 'assets/images/new-img/instagram.png' %}" alt="..."> Login With Instagram</h4>
+					<button type="button" class="close col-model-close" data-dismiss="modal">
+						<span aria-hidden="true">&times;</span>
+					</button>
+				</div>
+				<div class="modal-body">
+
+					<form id="login-form" class="form">
+						<div class="box-body">
+							<div class="form-group">
+								<label>User Name</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="ti-user"></i></span>
+									</div>
+									<input type="text" id="username" class="form-control" placeholder="Username">
+								</div>
+							</div>
+							<div class="form-group">
+								<label>Password</label>
+								<div class="input-group mb-3">
+									<div class="input-group-prepend">
+										<span class="input-group-text"><i class="ti-lock"></i></span>
+									</div>
+									<input type="password" id="password" class="form-control" placeholder="Password">
+								</div>
+							</div>
+							<div class="form-group text-center">
+								<button type="submit" class="btn bg-braned text-white btn-rounded mt-10">SIGN IN</button>
+							</div>
+						</div>
+					</form>
+
+				</div>
+				
+			</div>
+		</div>
+	</div>
+
+
+
+	<script>
+
+        async function handleSubmit(event) {
+            event.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            
+            const response = await fetch('{% url "insta_login" %}', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-CSRFToken': getCookie('csrftoken')  // Include CSRF token if necessary
+                },
+                body: JSON.stringify({ username, password })
+            });
+            
+            const data = await response.json();
+            
+            if (data.message === 'Login successful') {
+				
+                window.location.href = '{% url "instagram" %}';
+				
+            } else {
+                alert('Login unsuccessful');
+            }
+        }
+
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('login-form').addEventListener('submit', handleSubmit);
+        });
+
+
+	</script>
+
+
+
+
+
+
+
+
+	<script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
 	<script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
 	<script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
 	<script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.js' %}"></script>

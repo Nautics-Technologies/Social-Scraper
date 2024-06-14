@@ -14,8 +14,13 @@ urlpatterns = [
     path('', views.login_view, name='login'),
     path('signup/', views.user_signup, name='signup'),
     path('logout/', views.user_logout, name='logout'),
-    
+    path('login', views.insta_login, name='insta_login'),
+    path('instagram/', views.instagram_scrapper, name='instagram'),
+    path('followers', views.get_followers, name='user_followers'),
+    # path('followings', views.get_following, name='user_followings'),
+    path('user_profile', views.user_details, name='user_profile'),
 
+    
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),
     path('password_reset/done/', auth_views.PasswordResetDoneView.as_view(), name='password_reset_done'),
     path('reset/<uidb64>/<token>/', auth_views.PasswordResetConfirmView.as_view(), name='password_reset_confirm'),

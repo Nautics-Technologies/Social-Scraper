@@ -7,6 +7,12 @@ from django.contrib.auth.decorators import login_required
 import instaloader
 import json
 
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import instaloader
+import json
+import time
+import logging
 
 
 def user_signup(request):
@@ -46,21 +52,20 @@ def login_view(request):
 
 @login_required(login_url="/")
 def home(request):
-    return render(request, 'Dashboard.html')
+    return render(request, 'workspace-preference.html')
 
 
 @login_required(login_url="/")
 def integration(request):
-    if request.method == 'POST':
-        user_name = request.POST.get('user_name')
-        print(user_name)
-        profile_info_json = get_instagram_profile_info(user_name)
-        print(profile_info_json)
-        return render(request, 'integration.html', {'profile': profile_info_json})
     return render(request, 'integration.html')
+
 
 def forgot_password(request):
     return render(request, 'forgot-password.html')
+
+def instagram_scrapper(request):
+    return render(request, 'instagram.html')
+
 
 
 # logout page
@@ -69,25 +74,178 @@ def user_logout(request):
     return redirect('login')
 
 
-def get_instagram_profile_info(username):
-    L = instaloader.Instaloader()
-
-    try:
-        profile = instaloader.Profile.from_username(L.context, username)
-        profile_info = {
-            "username": profile.username,
-            "user_id": profile.userid,
-            "name": profile.full_name,
-            "total_posts": profile.mediacount,
-            "followers": profile.followers,
-            "followees": profile.followees,
-            "biography": profile.biography,
-            "is_private": profile.is_private,
-            "is_verified": profile.is_verified,
-            "is_business_account": profile.is_business_account
-        }
-        return profile_info
-    except Exception as e:
-        return {"error": str(e)}
 
 
+
+
+
+
+# import json
+# import requests
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# import instaloader
+# import logging
+
+# logger = logging.getLogger(__name__)
+
+# logged_in_user = None
+
+
+# @csrf_exempt
+# def insta_login(request):
+#     global logged_in_user
+#     if request.method == 'POST':
+#         try:
+#             data = json.loads(request.body)
+#             username = data.get('username')
+#             password = data.get('password')
+
+#             if not username or not password:
+#                 return JsonResponse({'error': 'Username and password are required.'}, status=400)
+
+#             session = requests.Session()
+#             session.get('https://www.instagram.com/accounts/login/')
+#             csrf_token = session.cookies['csrftoken']  # Extract CSRF token from cookies
+
+#             login_payload = {
+#                 'username': username,
+#                 'enc_password': f'#PWD_INSTAGRAM_BROWSER:0:&:{password}',  # Instagram may require this format
+#             }
+
+#             headers = {
+#                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
+#                 'X-CSRFToken': csrf_token,
+#                 'X-Instagram-AJAX': '1',  # Version number of the AJAX request
+#                 'X-Requested-With': 'XMLHttpRequest',
+#             }
+
+#             login_url = 'https://www.instagram.com/accounts/login/ajax/'
+#             response = session.post(login_url, data=login_payload, headers=headers)
+
+#             if response.status_code == 200 and response.json().get('authenticated'):
+#                 logged_in_user = username
+#                 return JsonResponse({'message': 'Login successful', 'user': response.json()}, status=200)
+#             else:
+#                 return JsonResponse({'error': 'Login failed', 'details': response.json()}, status=400)
+
+#         except Exception as e:
+#             logger.error(f'Error during login: {str(e)}')
+#             return JsonResponse({'error': str(e)}, status=400)
+
+#     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+
+
+
+import json
+import instaloader
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+import logging
+
+logger = logging.getLogger(__name__)
+
+# Global variables to store the login status and session
+L = instaloader.Instaloader()
+logged_in_user = None
+
+@csrf_exempt
+def insta_login(request):
+    global logged_in_user, L
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            username = data.get('username')
+            password = data.get('password')
+
+            if not username or not password:
+                return JsonResponse({'error': 'Username and password are required.'}, status=400)
+
+            try:
+                L.login(username, password)
+                logged_in_user = username
+                return JsonResponse({'message': 'Login successful'}, status=200)
+            except instaloader.exceptions.BadCredentialsException:
+                return JsonResponse({'error': 'Login failed: Bad credentials'}, status=400)
+            except Exception as e:
+                return JsonResponse({'error': f'Login failed: {str(e)}'}, status=400)
+
+        except Exception as e:
+            logger.error(f'Error during login: {str(e)}')
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+
+def user_details(request):
+    global logged_in_user, L
+    if request.method == 'GET':
+        try:
+            if not logged_in_user:
+                return JsonResponse({'error': 'User not logged in.'}, status=400)
+            
+            profile = instaloader.Profile.from_username(L.context, logged_in_user)
+
+            profile_info = {
+                'username': profile.username,
+                'full_name': profile.full_name,
+                'bio': profile.biography,
+                'profile_pic': profile.profile_pic_url,  # Make sure this key matches
+                'email': "None",  # Placeholder if email is not available
+                'phone': "None",  # Placeholder if phone is not available
+                'followers': profile.followers,  # Make sure this key matches
+                'followings': profile.followees,  # Make sure this key matches
+                'total_posts': profile.mediacount,  # Make sure this key matches
+                'external_url': profile.external_url,
+            }
+
+            return JsonResponse({'profile_data': profile_info}, status=200)
+
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=400)
+
+
+
+@csrf_exempt
+def get_followers(request):
+    global logged_in_user, L
+    if request.method == 'GET':
+        try:
+            if not logged_in_user:
+                return JsonResponse({'error': 'User not logged in.'}, status=400)
+
+            profile = instaloader.Profile.from_username(L.context, logged_in_user)
+            followers = [{'username': follower.username, 
+                        'full_name': follower.full_name, 
+                        'email': "None",  # Placeholder if email is not available
+                        'phone': "None",
+                        'External URL': follower.external_url,
+                        'bio':follower.biography,
+                        } 
+                        for follower in profile.get_followees()]
+
+            return JsonResponse({'followers': followers}, status=200)
+
+        except Exception as e:
+            logger.error(f'Error retrieving followers: {str(e)}')
+            return JsonResponse({'error': str(e)}, status=400)
+
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+
+# @csrf_exempt
+# def get_following(request):
+#     global logged_in_user, L
+#     if request.method == 'GET':
+#         try:
+#             if not logged_in_user:
+#                 return JsonResponse({'error': 'User not logged in.'}, status=400)
+
+#             profile = instaloader.Profile.from_username(L.context, logged_in_user)
+#             following = [{'username': followee.username, 'full_name': followee.full_name, 'profile_pic_url': followee.profile_pic_url} for followee in profile.get_followees()]
+
+#             return JsonResponse({'following': following}, status=200)
+
+#         except Exception as e:
+#             logger.error(f'Error retrieving following: {str(e)}')
+#             return JsonResponse({'error': str(e)}, status=400)
+
+#     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)

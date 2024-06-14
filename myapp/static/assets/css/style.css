@@ -15044,7 +15044,7 @@ time {
 
 .widget-user .widget-user-header {
   padding: 20px;
-  height: 140px;
+  height: 167px;
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem; }
 .widget-user .widget-user-username {
@@ -15056,13 +15056,13 @@ time {
   position: absolute;
   top: 85px;
   left: 50%;
-  margin-left: -45px; }
+  margin-left: -58px; }
   .widget-user .widget-user-image > img {
-    width: 90px;
+    width: 120px;
     height: auto;
     border: 3px solid #ffffff; }
 .widget-user .box-footer {
-  padding-top: 30px; }
+  padding-top: 55px; }
 
 .widget-user-2 .widget-user-header {
   border-top-right-radius: 0.25rem;
