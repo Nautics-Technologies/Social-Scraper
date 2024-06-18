@@ -53,9 +53,10 @@
                 <div class="navbar-custom-menu r-side">
                     <ul class="nav navbar-nav">
                         <li class="dropdown user user-menu">
-                            <a href="#" class="waves-effect waves-light dropdown-toggle p-5" data-toggle="dropdown"
+                            <a href="{% static 'assets/images/avatar/9.jpg' %}"
+                                class="waves-effect waves-light dropdown-toggle p-5" data-toggle="dropdown"
                                 title="User">
-                                <img src="{% static 'assets/images/avatar/9.jpg' %}" class="rounded" alt="" />
+                                <img src="{% static 'assets/images/user.png' %}" class="rounded" alt="" />
                             </a>
                             <ul class="dropdown-menu animated flipInX">
                                 <li class="user-header bg-img"
@@ -108,13 +109,13 @@
                 <div class="content-header">
                     <div class="d-flex align-items-center">
                         <div class="mr-auto">
-                            <h3 class="page-title">Instagram Scraper</h3>
+                            <h3 class="page-title">User Details</h3>
                             <div class="d-inline-block align-items-center">
                                 <nav>
                                     <ol class="breadcrumb">
                                         <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a>
                                         </li>
-                                        <li class="breadcrumb-item active" aria-current="page">Instagram Scraper
+                                        <li class="breadcrumb-item active" aria-current="page">User Details
                                         </li>
                                     </ol>
                                 </nav>
@@ -125,8 +126,8 @@
 
                 <section class="content">
                     <div class="row">
-                        <div class="col-md-3">
-                            <div class="box box-widget widget-user">
+                        <div class="col-md-4">
+                            <div class="box box-widget widget-user col-card-h">
                                 <div class="widget-user-header bg-black"
                                     style="background: url('{% static 'assets/images/gallery/full/10.jpg' %}')" center
                                     center;>
@@ -134,8 +135,8 @@
                                     <h6 id="Fullname" class="widget-user-desc">Designer</h6>
                                 </div>
                                 <div class="widget-user-image">
-                                    <img id="user-avatar" class="rounded-circle" src="{% static 'assets/images/user3-128x128.jpg' %}"
-                                        alt="User Avatar">
+                                    <img id="user-avatar" class="rounded-circle"
+                                        src="" alt="User Avatar">
                                 </div>
                                 <div class="box-footer">
                                     <div class="row">
@@ -161,43 +162,52 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-3">
-                            <form class="form">
-                                <div class="box">
+                        <div class="col-md-4">
+
+
+
+                            <form class="form" id="instagram-scraper-form">
+                                <div class="box col-card-h">
                                     <div class="box-header with-border">
                                         <h4 class="box-title">Instagram Scraper</h4>
                                     </div>
+                            
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <h5>which data you want to scrapr? <span class="text-danger">*</span></h5>
+                                            <h5>Which data do you want to scrape? <span class="text-danger">*</span></h5>
                                             <div class="controls">
                                                 <fieldset>
-                                                    <input type="checkbox" id="checkbox_2" required value="x">
-                                                    <label for="checkbox_2">FOLLOWERS</label>
+                                                    <input type="radio" id="checkbox_followers" name="data_type" value="followers" required>
+                                                    <label for="checkbox_followers">FOLLOWERS</label>
                                                 </fieldset>
                                                 <fieldset>
-                                                    <input type="checkbox" id="checkbox_3" value="y">
-                                                    <label for="checkbox_3">FOLLOWING</label>
+                                                    <input type="radio" id="checkbox_following" name="data_type" value="following">
+                                                    <label for="checkbox_following">FOLLOWING</label>
                                                 </fieldset>
                                             </div>
                                         </div>
                                         <div class="form-group text-center">
-                                            <button type="submit"
-                                                class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
+                                            <button type="submit" class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
                                         </div>
                                     </div>
                                 </div>
                             </form>
+                            
+
+
+
+
+
                         </div>
                         <div class="box">
                             <div class="box-header with-border">
-                                <h3 class="box-title">Profile Data</h3>
+                                <h3 class="box-title">User Data</h3>
                             </div>
                             <div class="box-body">
                                 <div class="table-responsive">
-                                    <table id="example"
+                                    <table id="data-table"
                                         class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
-                                        <thead>
+                                        <thead class="col-header">
                                             <tr>
                                                 <th>Username</th>
                                                 <th>Full Name</th>
@@ -225,7 +235,7 @@
     </div>
 
 
-    <script>
+    <!-- <script>
 
 document.addEventListener('DOMContentLoaded', function() {
             fetchFollowers();
@@ -255,7 +265,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <td>${follower.username}</td>
                         <td>${follower.full_name}</td>
                         <td>${follower.bio}</td>
-                        <td><a href="${follower.external_url}" target="_blank">${follower.external_url}</a></td>
+                        <td><a href="${follower.external_url}" target="_blank">${follower.external_url}</a></td>+
                         <td>${follower.email}</td>
                         <td>${follower.phone}</td>
                     `;
@@ -267,34 +277,123 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error fetching data:', error);
             }
         }
+</script> -->
+
+
+   <script>
+document.getElementById('instagram-scraper-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const selectedOption = document.querySelector('input[name="data_type"]:checked');
+    
+    if (!selectedOption) {
+        alert('Please select an option.');
+        return;
+    }
+
+    const apiUrl = selectedOption.value === 'followers' ? '/followers' : '/followings';
+
+    console.log("API URL:", apiUrl);
+
+    // Show loading row
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '<tr id="loading-row"><td colspan="6">Loading...</td></tr>';
+
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Received data:", data);
+        if (data.error) {
+            alert('Error: ' + data.error);
+            tableBody.innerHTML = '';  // Clear the loading row
+        } else {
+            populateTable(data.followers || data.following);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+        tableBody.innerHTML = '';  // Clear the loading row
+    });
+});
+
+function populateTable(data) {
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '';  // Clear the table body
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.username}</td>
+            <td>${item.full_name}</td>
+            <td>${item.bio || ''}</td>
+            <td>${item.external_url || ''}</td>
+            <td>${item.email || ''}</td>
+            <td>${item.phone || ''}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
 </script>
 
 
 
+
+
+
+
     <script>
-       document.addEventListener('DOMContentLoaded', function() {
-    fetch('{% url "user_profile" %}')  // Ensure this resolves to the correct URL
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                console.error('Error:', data.error);
-                alert('Error fetching profile data');
-                return;
-            }
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('{% url "user_profile" %}')  // Ensure this resolves to the correct URL
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        alert('Error fetching profile data');
+                        return;
+                    }
 
-            const profileData = data.profile_data;
+                    const profileData = data.profile_data;
+                    const proxyUrl = '{% url "proxy_instagram_image" %}?url=' + encodeURIComponent(profileData.profile_pic);
 
-            document.getElementById('user-avatar').src = profileData.profile_pic;
-            document.getElementById('followers').textContent = profileData.followers;
-            document.getElementById('followings').textContent = profileData.followings;
-            document.getElementById('posts').textContent = profileData.total_posts;
-            document.getElementById('username').textContent = profileData.username;
-            document.getElementById('Fullname').textContent = profileData.username;
+                    document.getElementById('user-avatar').src = proxyUrl;
+
+                    document.getElementById('followers').textContent = profileData.followers;
+                    document.getElementById('followings').textContent = profileData.followings;
+                    document.getElementById('posts').textContent = profileData.total_posts;
+                    document.getElementById('username').textContent = profileData.username;
+                    document.getElementById('Fullname').textContent = profileData.username;
 
 
-        })
-        .catch(error => console.error('Error fetching data:', error));
-});
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
 
     </script>
 
@@ -309,6 +408,7 @@ document.addEventListener('DOMContentLoaded', function() {
     <script src="{% static 'assets/vendor_components/fastclick/lib/fastclick.js' %}"></script>
     <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
     <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
+    <!-- <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script> -->
     <script src="{% static 'assets/js/pages/data-table.js' %}"></script>
     <script src="{% static 'assets/js/template.js' %}"></script>
     <script src="{% static 'assets/js/pages/media.js' %}"></script>

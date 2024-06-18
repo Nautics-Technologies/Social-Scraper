@@ -16,9 +16,11 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('login', views.insta_login, name='insta_login'),
     path('instagram/', views.instagram_scrapper, name='instagram'),
-    path('followers', views.get_followers, name='user_followers'),
-    # path('followings', views.get_following, name='user_followings'),
+    path('followings', views.get_followers, name='user_followers'),
+    path('followers', views.get_following, name='user_followings'),
     path('user_profile', views.user_details, name='user_profile'),
+    path('proxy-instagram-image/', views.proxy_instagram_image, name='proxy_instagram_image'),
+
 
     
     path('password_reset/', auth_views.PasswordResetView.as_view(), name='password_reset'),

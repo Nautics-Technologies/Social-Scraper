@@ -5,8 +5,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 import instaloader
-import json
-
+import requests
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 import instaloader
@@ -176,6 +175,22 @@ def insta_login(request):
 
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
+
+def proxy_instagram_image(request):
+    """
+    Proxy view to fetch Instagram profile picture.
+    """
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse(status=400)
+
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        content_type = response.headers['Content-Type']
+        return HttpResponse(response.content, content_type=content_type)
+    return HttpResponse(status=response.status_code)
+
+
 def user_details(request):
     global logged_in_user, L
     if request.method == 'GET':
@@ -216,10 +231,11 @@ def get_followers(request):
             profile = instaloader.Profile.from_username(L.context, logged_in_user)
             followers = [{'username': follower.username, 
                         'full_name': follower.full_name, 
-                        'email': "None",  # Placeholder if email is not available
-                        'phone': "None",
+                        'email': "-",  # Placeholder if email is not available
+                        'phone': "-",
                         'External URL': follower.external_url,
                         'bio':follower.biography,
+                        'Address':"-",
                         } 
                         for follower in profile.get_followees()]
 
@@ -231,21 +247,30 @@ def get_followers(request):
 
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
-# @csrf_exempt
-# def get_following(request):
-#     global logged_in_user, L
-#     if request.method == 'GET':
-#         try:
-#             if not logged_in_user:
-#                 return JsonResponse({'error': 'User not logged in.'}, status=400)
+@csrf_exempt
+def get_following(request):
+    global logged_in_user, L
+    if request.method == 'GET':
+        try:
+            if not logged_in_user:
+                return JsonResponse({'error': 'User not logged in.'}, status=400)
 
-#             profile = instaloader.Profile.from_username(L.context, logged_in_user)
-#             following = [{'username': followee.username, 'full_name': followee.full_name, 'profile_pic_url': followee.profile_pic_url} for followee in profile.get_followees()]
+            profile = instaloader.Profile.from_username(L.context, logged_in_user)
+            following = [{'username': followee.username, 
+                          'full_name': followee.full_name, 
+                          'profile_pic_url': followee.profile_pic_url  ,                  
+                          'email': "-",  # Placeholder if email is not available
+                          'phone': "-",
+                          'External URL': followee.external_url,
+                          'bio':followee.biography,
+                          'Address':"-",
+                          
+                        } for followee in profile.get_followers()]
 
-#             return JsonResponse({'following': following}, status=200)
+            return JsonResponse({'following': following}, status=200)
 
-#         except Exception as e:
-#             logger.error(f'Error retrieving following: {str(e)}')
-#             return JsonResponse({'error': str(e)}, status=400)
+        except Exception as e:
+            logger.error(f'Error retrieving following: {str(e)}')
+            return JsonResponse({'error': str(e)}, status=400)
 
-#     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)

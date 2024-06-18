@@ -44,3 +44,19 @@
 .br-5{
     border-radius: 5px;
 }
+.col-card-h{
+    height:265px !important;
+}
+.light-skin .sidebar a {
+    color: #fff !important;
+    opacity: inherit !important; 
+}
+
+.bg-gradient-blackberry, .theme-blackberry .bg-gradient-blackberry, .theme-blackberry .art-bg, .theme-blackberry.fixed .main-header, .theme-blackberry .main-header {
+    background-color: #7367f0;
+}
+
+.col-header{
+    background-color: #7367f0;
+    color: #fff;
+}
