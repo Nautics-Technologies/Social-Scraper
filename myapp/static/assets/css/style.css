@@ -84,7 +84,7 @@ h4, .h4, h5, .h5, h6, .h6 {
   font-size: 1.7142857142857142rem; }
 
 .h4, h4 {
-  font-size: 21px; }
+  font-size: 1.2857142857142858rem; }
 
 .h5, h5 {
   font-size: 1.1428571428571428rem; }
@@ -11937,7 +11937,8 @@ body .main-header .navbar .nav > li.search-box > a:hover, body .main-header .nav
     .navbar-nav > .user-menu > .dropdown-menu > .user-body a {
       padding: 10px 15px;
       display: block;
-      font-size: 1.1rem; }
+      font-size: 16px;
+      font-weight: 400; }
       .navbar-nav > .user-menu > .dropdown-menu > .user-body a i {
         margin-right: 10px; }
     .navbar-nav > .user-menu > .dropdown-menu > .user-body .divider {
@@ -15043,7 +15044,7 @@ time {
 
 .widget-user .widget-user-header {
   padding: 20px;
-  height: 140px;
+  height: 167px;
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem; }
 .widget-user .widget-user-username {
@@ -15053,22 +15054,23 @@ time {
   margin-top: 0; }
 .widget-user .widget-user-image {
   position: absolute;
-  top: 85px;
+  top: 75px;
   left: 50%;
-  margin-left: -45px; }
+  margin-left: -44px; }
   .widget-user .widget-user-image > img {
-    width: 90px;
+    width: 95px;
     height: auto;
     border: 3px solid #ffffff; }
 .widget-user .box-footer {
-  padding-top: 30px; }
+  padding-top: 55px; }
 
 .widget-user-2 .widget-user-header {
   border-top-right-radius: 0.25rem;
   border-top-left-radius: 0.25rem;
   padding: 20px; }
 .widget-user-2 .widget-user-username {
-  margin-left: 15px; }
+  margin-top: 5px;
+  margin-left: 75px; }
 .widget-user-2 .widget-user-desc {
   margin-top: 0;
   margin-left: 75px; }
@@ -18123,7 +18125,8 @@ textarea.form-control {
 .flexbox {
   display: -webkit-box;
   display: flex;
-  -webkit-box-pack: justify; }
+  -webkit-box-pack: justify;
+  justify-content: space-between; }
   .flexbox .dropdown i {
     font-size: 1rem; }
   .flexbox > * {

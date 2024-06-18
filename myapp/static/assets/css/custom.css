@@ -1,0 +1,62 @@
+.bg-braned{
+    background-color: #7367f0;
+}
+.btn{
+    border: 2px solid transparent;;
+}
+.btn-transparent:hover{
+    background-color: transparent !important;
+    box-shadow: none !important;
+    transition: none !important;
+}
+.bg-facebook{
+    background-color: #1778f2 !important;
+}
+.bg-instagram{
+    background-image: linear-gradient(to right, #4f5bd5, #962fbf, #d62976, #fa7e1e, #feda75);;
+}
+.bg-tiktok{
+    background-color: #000000;
+}
+.bg-linkedin{
+    background-color: #0076b4 !important;
+}
+.bg-youtube{
+    background-color: #ed2225 !important;
+}
+.bg-gmb{
+    background-color: #1474b7 !important;
+}
+.bg-pintrest{
+    background-color: #e6001f !important;
+}
+.avatar{
+    background-color: transparent !important;
+    border-radius: unset !important;
+}
+.col-model-close{
+    padding: 10px !important;
+    background-color: #fff !important;
+    border-radius: 6px !important;
+    color: #000 !important;
+    margin:unset !important;
+}
+.br-5{
+    border-radius: 5px;
+}
+.col-card-h{
+    height:265px !important;
+}
+.light-skin .sidebar a {
+    color: #fff !important;
+    opacity: inherit !important; 
+}
+
+.bg-gradient-blackberry, .theme-blackberry .bg-gradient-blackberry, .theme-blackberry .art-bg, .theme-blackberry.fixed .main-header, .theme-blackberry .main-header {
+    background-color: #7367f0;
+}
+
+.col-header{
+    background-color: #7367f0;
+    color: #fff;
+}

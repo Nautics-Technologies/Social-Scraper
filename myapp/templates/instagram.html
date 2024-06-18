@@ -1,0 +1,419 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" href="{% static 'assets/images/favicon.ico' %}">
+
+    <title>Pearl Admin - Dashboard Advanced medias </title>
+    <link rel="stylesheet" href="{% static 'assets/vendor_components/bootstrap/dist/css/bootstrap.css' %}">
+    <link rel="stylesheet" type="text/css"
+        href="{% static 'assets/vendor_components/datatable/datatables.min.css' %}" />
+    <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/skin_color.css' %}">
+    <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+
+</head>
+
+<body class="hold-transition light-skin sidebar-mini theme-blackberry">
+    <div class="wrapper">
+
+        <header class="main-header">
+            <div class="d-flex align-items-center ml-5">
+                <a href="#" class="waves-effect waves-light nav-link rounded d-none d-md-inline-block"
+                    data-toggle="push-menu" role="button">
+                    <i class="nav-link-icon mdi mdi-menu text-white"></i>
+                </a>
+                <a href="#" class="logo">
+                    <div class="logo-lg">
+                        <span class="light-logo"><img src="{% static 'assets/images/logo-light-text.png' %}"
+                                alt="logo"></span>
+                        <span class="dark-logo"><img src="{% static 'assets/images/logo-dark-text.png' %}"
+                                alt="logo"></span>
+                    </div>
+                </a>
+            </div>
+            <nav class="navbar navbar-static-top">
+                <div class="app-menu">
+                    <ul class="header-megamenu nav">
+                        <li class="btn-group nav-item d-md-none">
+                            <a href="#" class="waves-effect waves-light nav-link rounded" data-toggle="push-menu"
+                                role="button">
+                                <i class="nav-link-icon mdi mdi-menu text-white"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="navbar-custom-menu r-side">
+                    <ul class="nav navbar-nav">
+                        <li class="dropdown user user-menu">
+                            <a href="{% static 'assets/images/avatar/9.jpg' %}"
+                                class="waves-effect waves-light dropdown-toggle p-5" data-toggle="dropdown"
+                                title="User">
+                                <img src="{% static 'assets/images/user.png' %}" class="rounded" alt="" />
+                            </a>
+                            <ul class="dropdown-menu animated flipInX">
+                                <li class="user-header bg-img"
+                                    style="background-image: url(assets/images/user-info.jpg)" data-overlay="3">
+                                    <div class="flexbox align-self-center">
+                                        <img src="{% static 'assets/images/avatar/7.jpg' %}"
+                                            class="float-left rounded-circle" alt="User Image">
+                                        <h4 class="user-name align-self-center">
+                                            <span>Samuel Brus</span>
+                                            <small>samuel@gmail.com</small>
+                                        </h4>
+                                    </div>
+                                </li>
+                                <li class="user-body">
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-person"></i>
+                                        Workspace Users</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-bag"></i>
+                                        Workspace Preferences</a>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i
+                                            class="ion ion-email-unread"></i> Integrations</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-settings"></i>
+                                        Agency Dashboard</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion-log-out"></i>
+                                        Logout</a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+
+        <aside class="main-sidebar">
+            <section class="sidebar">
+                <ul class="sidebar-menu" data-widget="tree">
+                    <li class="treeview">
+                        <a href="#">
+                            <i class="mdi mdi-minus-network"></i>
+                            <span>Dashboard</span>
+                        </a>
+                    </li>
+                </ul>
+            </section>
+        </aside>
+
+        <div class="content-wrapper">
+            <div class="container-full">
+                <div class="content-header">
+                    <div class="d-flex align-items-center">
+                        <div class="mr-auto">
+                            <h3 class="page-title">User Details</h3>
+                            <div class="d-inline-block align-items-center">
+                                <nav>
+                                    <ol class="breadcrumb">
+                                        <li class="breadcrumb-item"><a href="#"><i class="mdi mdi-home-outline"></i></a>
+                                        </li>
+                                        <li class="breadcrumb-item active" aria-current="page">User Details
+                                        </li>
+                                    </ol>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <section class="content">
+                    <div class="row">
+                        <div class="col-md-4">
+                            <div class="box box-widget widget-user col-card-h">
+                                <div class="widget-user-header bg-black"
+                                    style="background: url('{% static 'assets/images/gallery/full/10.jpg' %}')" center
+                                    center;>
+                                    <h3 id="username" class="widget-user-username">Michael Jorden</h3>
+                                    <h6 id="Fullname" class="widget-user-desc">Designer</h6>
+                                </div>
+                                <div class="widget-user-image">
+                                    <img id="user-avatar" class="rounded-circle"
+                                        src="" alt="User Avatar">
+                                </div>
+                                <div class="box-footer">
+                                    <div class="row">
+                                        <div class="col-sm-4">
+                                            <div class="description-block">
+                                                <h5 id="followers" class="description-header">12K</h5>
+                                                <span class="description-text">FOLLOWERS</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4 br-1 bl-1">
+                                            <div class="description-block">
+                                                <h5 id="followings" class="description-header">550</h5>
+                                                <span class="description-text">FOLLOWINGS</span>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="description-block">
+                                                <h5 id="posts" class="description-header">158</h5>
+                                                <span class="description-text">Posts</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+
+
+
+                            <form class="form" id="instagram-scraper-form">
+                                <div class="box col-card-h">
+                                    <div class="box-header with-border">
+                                        <h4 class="box-title">Instagram Scraper</h4>
+                                    </div>
+                            
+                                    <div class="box-body">
+                                        <div class="form-group">
+                                            <h5>Which data do you want to scrape? <span class="text-danger">*</span></h5>
+                                            <div class="controls">
+                                                <fieldset>
+                                                    <input type="radio" id="checkbox_followers" name="data_type" value="followers" required>
+                                                    <label for="checkbox_followers">FOLLOWERS</label>
+                                                </fieldset>
+                                                <fieldset>
+                                                    <input type="radio" id="checkbox_following" name="data_type" value="following">
+                                                    <label for="checkbox_following">FOLLOWING</label>
+                                                </fieldset>
+                                            </div>
+                                        </div>
+                                        <div class="form-group text-center">
+                                            <button type="submit" class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            
+
+
+
+
+
+                        </div>
+                        <div class="box">
+                            <div class="box-header with-border">
+                                <h3 class="box-title">User Data</h3>
+                            </div>
+                            <div class="box-body">
+                                <div class="table-responsive">
+                                    <table id="data-table"
+                                        class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                                        <thead class="col-header">
+                                            <tr>
+                                                <th>Username</th>
+                                                <th>Full Name</th>
+                                                <th>Biography</th>
+                                                <th>External URL</th>
+                                                <th>Email</th>
+                                                <th>Phone No</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr id="loading-row">
+                                                <td colspan="6">Loading...</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+
+        <div class="control-sidebar-bg"></div>
+    </div>
+
+
+    <!-- <script>
+
+document.addEventListener('DOMContentLoaded', function() {
+            fetchFollowers();
+        });
+
+        async function fetchFollowers() {
+            try {
+                const response = await fetch('{% url "user_followers" %}');  // Ensure this URL is correct
+                const data = await response.json();
+
+                console.log(data);  // Log the response to inspect the structure
+
+                if (data.error) {
+                    console.error('Error:', data.error);
+                    alert('Error fetching followers');
+                    return;
+                }
+
+                const followers = data.followers;
+                const tableBody = document.querySelector('#example tbody');
+                tableBody.innerHTML = '';  // Clear the loading row
+
+                followers.forEach(follower => {
+                    const row = document.createElement('tr');
+
+                    row.innerHTML = `
+                        <td>${follower.username}</td>
+                        <td>${follower.full_name}</td>
+                        <td>${follower.bio}</td>
+                        <td><a href="${follower.external_url}" target="_blank">${follower.external_url}</a></td>+
+                        <td>${follower.email}</td>
+                        <td>${follower.phone}</td>
+                    `;
+
+                    tableBody.appendChild(row);
+                });
+
+            } catch (error) {
+                console.error('Error fetching data:', error);
+            }
+        }
+</script> -->
+
+
+   <script>
+document.getElementById('instagram-scraper-form').addEventListener('submit', function(event) {
+    event.preventDefault();
+
+    const selectedOption = document.querySelector('input[name="data_type"]:checked');
+    
+    if (!selectedOption) {
+        alert('Please select an option.');
+        return;
+    }
+
+    const apiUrl = selectedOption.value === 'followers' ? '/followers' : '/followings';
+
+    console.log("API URL:", apiUrl);
+
+    // Show loading row
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '<tr id="loading-row"><td colspan="6">Loading...</td></tr>';
+
+    fetch(apiUrl, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRFToken': getCookie('csrftoken')
+        }
+    })
+    .then(response => {
+        if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+        }
+        return response.json();
+    })
+    .then(data => {
+        console.log("Received data:", data);
+        if (data.error) {
+            alert('Error: ' + data.error);
+            tableBody.innerHTML = '';  // Clear the loading row
+        } else {
+            populateTable(data.followers || data.following);
+        }
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        alert('An error occurred: ' + error.message);
+        tableBody.innerHTML = '';  // Clear the loading row
+    });
+});
+
+function populateTable(data) {
+    const tableBody = document.querySelector('#data-table tbody');
+    tableBody.innerHTML = '';  // Clear the table body
+
+    data.forEach(item => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td>${item.username}</td>
+            <td>${item.full_name}</td>
+            <td>${item.bio || ''}</td>
+            <td>${item.external_url || ''}</td>
+            <td>${item.email || ''}</td>
+            <td>${item.phone || ''}</td>
+        `;
+        tableBody.appendChild(row);
+    });
+}
+
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+</script>
+
+
+
+
+
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch('{% url "user_profile" %}')  // Ensure this resolves to the correct URL
+                .then(response => response.json())
+                .then(data => {
+                    if (data.error) {
+                        console.error('Error:', data.error);
+                        alert('Error fetching profile data');
+                        return;
+                    }
+
+                    const profileData = data.profile_data;
+                    const proxyUrl = '{% url "proxy_instagram_image" %}?url=' + encodeURIComponent(profileData.profile_pic);
+
+                    document.getElementById('user-avatar').src = proxyUrl;
+
+                    document.getElementById('followers').textContent = profileData.followers;
+                    document.getElementById('followings').textContent = profileData.followings;
+                    document.getElementById('posts').textContent = profileData.total_posts;
+                    document.getElementById('username').textContent = profileData.username;
+                    document.getElementById('Fullname').textContent = profileData.username;
+
+
+                })
+                .catch(error => console.error('Error fetching data:', error));
+        });
+
+    </script>
+
+
+
+
+    <script src="{% static 'assets/vendor_components/jquery-3.3.1/jquery-3.3.1.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/screenfull/screenfull.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/popper/dist/popper.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/bootstrap/dist/js/bootstrap.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-slimscroll/jquery.slimscroll.min.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/fastclick/lib/fastclick.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
+    <script src="{% static 'assets/vendor_components/jquery-sparkline/dist/jquery.sparkline.js' %}"></script>
+    <!-- <script src="{% static 'assets/vendor_components/datatable/datatables.min.js' %}"></script> -->
+    <script src="{% static 'assets/js/pages/data-table.js' %}"></script>
+    <script src="{% static 'assets/js/template.js' %}"></script>
+    <script src="{% static 'assets/js/pages/media.js' %}"></script>
+    <script src="{% static 'assets/js/demo.js' %}"></script>
+
+</body>
+
+</html>

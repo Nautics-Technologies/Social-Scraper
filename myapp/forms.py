@@ -24,3 +24,10 @@ class SignupForm(UserCreationForm):
 class LoginForm(forms.Form):
     username = forms.CharField()
     password = forms.CharField(widget=forms.PasswordInput)
+
+
+
+
+class ScraperForm(forms.Form):
+    username = forms.CharField(label='Instagram Username', max_length=100)
+    password = forms.CharField(label='Instagram Password', widget=forms.PasswordInput)
