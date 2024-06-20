@@ -210,11 +210,16 @@
                                         <thead class="col-header">
                                             <tr>
                                                 <th>Username</th>
+                                                <th>User ID</th>
                                                 <th>Full Name</th>
                                                 <th>Biography</th>
                                                 <th>External URL</th>
                                                 <th>Email</th>
                                                 <th>Phone No</th>
+                                                <th>followees</th>
+                                                <th>followers</th>
+                                                <th>is_private</th>
+                                                <th>is_verified</th>
                                             </tr>
                                         </thead>
                                         <tbody>
@@ -281,11 +286,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
    <script>
-document.getElementById('instagram-scraper-form').addEventListener('submit', function(event) {
+    document.getElementById('instagram-scraper-form').addEventListener('submit', function(event) {
     event.preventDefault();
 
     const selectedOption = document.querySelector('input[name="data_type"]:checked');
-    
+
     if (!selectedOption) {
         alert('Please select an option.');
         return;
@@ -299,6 +304,14 @@ document.getElementById('instagram-scraper-form').addEventListener('submit', fun
     const tableBody = document.querySelector('#data-table tbody');
     tableBody.innerHTML = '<tr id="loading-row"><td colspan="6">Loading...</td></tr>';
 
+    // Initialize empty response counter
+    let emptyResponseCounter = 0;
+
+    // Fetch and update data
+    fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter);
+});
+
+function fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter) {
     fetch(apiUrl, {
         method: 'GET',
         headers: {
@@ -316,35 +329,61 @@ document.getElementById('instagram-scraper-form').addEventListener('submit', fun
         console.log("Received data:", data);
         if (data.error) {
             alert('Error: ' + data.error);
-            tableBody.innerHTML = '';  // Clear the loading row
+            return;
+        }
+
+        const newData = data.followers || data.followings;
+
+        if (newData.length > 0) {
+            emptyResponseCounter = 0; // Reset the counter when data is received
+            populateTable(newData, tableBody);
+            fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter); // Recursively call with updated counter
         } else {
-            populateTable(data.followers || data.following);
+            emptyResponseCounter += 1; // Increment the counter for empty response
+            if (emptyResponseCounter >= 2) {
+                alert('No more data to load.');
+                document.getElementById('loading-row').remove(); // Remove loading row when done
+            } else {
+                fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter); // Recursively call with updated counter
+            }
         }
     })
     .catch(error => {
         console.error('Error:', error);
         alert('An error occurred: ' + error.message);
-        tableBody.innerHTML = '';  // Clear the loading row
+        document.getElementById('loading-row').remove(); // Remove loading row on error
     });
-});
+}
 
-function populateTable(data) {
-    const tableBody = document.querySelector('#data-table tbody');
-    tableBody.innerHTML = '';  // Clear the table body
+
+function populateTable(data, tableBody) {
+    if (!data || !Array.isArray(data)) {
+        console.error('Invalid data received:', data);
+        alert('Invalid data received from the server.');
+        return;
+    }
 
     data.forEach(item => {
         const row = document.createElement('tr');
         row.innerHTML = `
-            <td>${item.username}</td>
-            <td>${item.full_name}</td>
-            <td>${item.bio || ''}</td>
-            <td>${item.external_url || ''}</td>
-            <td>${item.email || ''}</td>
-            <td>${item.phone || ''}</td>
+            <td>${item.username || '-'}</td>
+            <td>${item.User_id || '-'}</td>
+            <td>${item.full_name || '-'}</td>
+            <td>${item.biography || '-'}</td>
+            <td>${item.external_url || '-'}</td>
+            <td>${item.email || '-'}</td>
+            <td>${item.phone_number || '-'}</td>
+            <td>${item.followees || '-'}</td>
+            <td>${item.followers || '-'}</td>
+            <td>${item.is_private ? 'Yes' : 'No'}</td>
+            <td>${item.is_verified ? 'Yes' : 'No'}</td>
         `;
         tableBody.appendChild(row);
     });
 }
+
+
+
 
 function getCookie(name) {
     let cookieValue = null;
