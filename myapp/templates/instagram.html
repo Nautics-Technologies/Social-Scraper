@@ -17,6 +17,7 @@
     <link rel="stylesheet" href="{% static 'assets/css/style.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/skin_color.css' %}">
     <link rel="stylesheet" href="{% static 'assets/css/custom.css' %}">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
 </head>
 
@@ -81,7 +82,7 @@
                                     <a class="dropdown-item" href="javascript:void(0)"><i class="ion ion-settings"></i>
                                         Agency Dashboard</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="javascript:void(0)"><i class="ion-log-out"></i>
+                                    <a class="dropdown-item" href="{% url 'home' %}"><i class="ion-log-out"></i>
                                         Logout</a>
                                 </li>
                             </ul>
@@ -95,7 +96,7 @@
             <section class="sidebar">
                 <ul class="sidebar-menu" data-widget="tree">
                     <li class="treeview">
-                        <a href="#">
+                        <a href="{% url 'home' %}">
                             <i class="mdi mdi-minus-network"></i>
                             <span>Dashboard</span>
                         </a>
@@ -131,30 +132,29 @@
                                 <div class="widget-user-header bg-black"
                                     style="background: url('{% static 'assets/images/gallery/full/10.jpg' %}')" center
                                     center;>
-                                    <h3 id="username" class="widget-user-username">Michael Jorden</h3>
-                                    <h6 id="Fullname" class="widget-user-desc">Designer</h6>
+                                    <h3 id="username" class="widget-user-username"></h3>
+                                    <h6 id="Fullname" class="widget-user-desc"></h6>
                                 </div>
                                 <div class="widget-user-image">
-                                    <img id="user-avatar" class="rounded-circle"
-                                        src="" alt="User Avatar">
+                                    <img id="user-avatar" class="rounded-circle" src="" alt="User Avatar">
                                 </div>
                                 <div class="box-footer">
                                     <div class="row">
                                         <div class="col-sm-4">
                                             <div class="description-block">
-                                                <h5 id="followers" class="description-header">12K</h5>
+                                                <h5 id="followers" class="description-header"></h5>
                                                 <span class="description-text">FOLLOWERS</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-4 br-1 bl-1">
                                             <div class="description-block">
-                                                <h5 id="followings" class="description-header">550</h5>
+                                                <h5 id="followings" class="description-header"></h5>
                                                 <span class="description-text">FOLLOWINGS</span>
                                             </div>
                                         </div>
                                         <div class="col-sm-4">
                                             <div class="description-block">
-                                                <h5 id="posts" class="description-header">158</h5>
+                                                <h5 id="posts" class="description-header"></h5>
                                                 <span class="description-text">Posts</span>
                                             </div>
                                         </div>
@@ -171,236 +171,187 @@
                                     <div class="box-header with-border">
                                         <h4 class="box-title">Instagram Scraper</h4>
                                     </div>
-                            
+
                                     <div class="box-body">
                                         <div class="form-group">
-                                            <h5>Which data do you want to scrape? <span class="text-danger">*</span></h5>
-                                            <div class="controls">
-                                                <fieldset>
-                                                    <input type="radio" id="checkbox_followers" name="data_type" value="followers" required>
-                                                    <label for="checkbox_followers">FOLLOWERS</label>
-                                                </fieldset>
-                                                <fieldset>
-                                                    <input type="radio" id="checkbox_following" name="data_type" value="following">
-                                                    <label for="checkbox_following">FOLLOWING</label>
-                                                </fieldset>
-                                            </div>
-                                        </div>
-                                        <div class="form-group text-center">
-                                            <button type="submit" class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
+                                            <h5>Which data do you want to scrape? <span class="text-danger">*</span>
+                                            </h5>
+                                            <div class="controls"
+
+                                                style="display: flex; justify-content: space-between; gap: 10px;">
+                                           
+
+                                            <button id="fetch-followers" type="button"
+                                                style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 8px;">Fetch
+                                                Followers Data</button>
+                                            <button id="fetch-followings" type="button"
+                                                style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer; border-radius: 8px;">Fetch
+                                                Followings Data</button>
+
                                         </div>
                                     </div>
+                                    <!-- <div class="form-group text-center">
+                                        <button type="submit"
+                                            class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
+                                    </div> -->
                                 </div>
-                            </form>
-                            
+                        </div>
+                        </form>
 
 
+
+
+
+
+                    </div>
+                    <div class="box">
+                        <div class="box-header with-border" style="display: flex; justify-content: space-between;">
+                            <h3 class="box-title">User Data</h3>
+                            <button id="scrape-button" type="button" style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Scrape Data</button>
+
+
+
+
+
+                            <!-- <form method="post" action="{% url 'scrape_data' %}" style="display: inline-flex;">
+                                {% csrf_token %}
+                                <button type="submit"
+                                    style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Scrape
+                                    Data</button>
+                            </form> -->
 
 
 
                         </div>
-                        <div class="box">
-                            <div class="box-header with-border">
-                                <h3 class="box-title">User Data</h3>
-                            </div>
-                            <div class="box-body">
-                                <div class="table-responsive">
-                                    <table id="data-table"
-                                        class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
-                                        <thead class="col-header">
-                                            <tr>
-                                                <th>Username</th>
-                                                <th>User ID</th>
-                                                <th>Full Name</th>
-                                                <th>Biography</th>
-                                                <th>External URL</th>
-                                                <th>Email</th>
-                                                <th>Phone No</th>
-                                                <th>followees</th>
-                                                <th>followers</th>
-                                                <th>is_private</th>
-                                                <th>is_verified</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr id="loading-row">
-                                                <td colspan="6">Loading...</td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
+
+                        <div class="box-body">
+                            <div class="table-responsive">
+                                <table id="data-table"
+                                    class="table table-bordered table-hover display nowrap margin-top-10 w-p100">
+                                    <thead class="col-header">
+                                        <tr>
+                                            <th>Username</th>
+                                            <th>User ID</th>
+                                            <th>Full Name</th>
+                                            <th>Biography</th>
+                                            <th>External URL</th>
+                                            <th>Email</th>
+                                            <th>Phone No</th>
+                                            <th>followees</th>
+                                            <th>followers</th>
+                                            <th>is_private</th>
+                                            <th>is_verified</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr id="loading-row">
+                                            <td colspan="6">Loading...</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
                             </div>
                         </div>
                     </div>
-                </section>
             </div>
+            </section>
         </div>
+    </div>
 
-        <div class="control-sidebar-bg"></div>
+    <div class="control-sidebar-bg"></div>
     </div>
 
 
-    <!-- <script>
 
-document.addEventListener('DOMContentLoaded', function() {
-            fetchFollowers();
-        });
 
-        async function fetchFollowers() {
-            try {
-                const response = await fetch('{% url "user_followers" %}');  // Ensure this URL is correct
-                const data = await response.json();
 
-                console.log(data);  // Log the response to inspect the structure
-
-                if (data.error) {
-                    console.error('Error:', data.error);
-                    alert('Error fetching followers');
-                    return;
+    <script>
+        $('#scrape-button').on('click', function() {
+            $.ajax({
+                url: "{% url 'scrape_data' %}",
+                type: 'POST',
+                data: {
+                    csrfmiddlewaretoken: '{{ csrf_token }}'
+                },
+                success: function(response) {
+                    alert(response.message);
+                },
+                error: function() {
+                    alert('An error occurred.');
                 }
+            });
+        });
+    </script>
 
-                const followers = data.followers;
-                const tableBody = document.querySelector('#example tbody');
-                tableBody.innerHTML = '';  // Clear the loading row
 
-                followers.forEach(follower => {
-                    const row = document.createElement('tr');
 
-                    row.innerHTML = `
-                        <td>${follower.username}</td>
-                        <td>${follower.full_name}</td>
-                        <td>${follower.bio}</td>
-                        <td><a href="${follower.external_url}" target="_blank">${follower.external_url}</a></td>+
-                        <td>${follower.email}</td>
-                        <td>${follower.phone}</td>
-                    `;
 
-                    tableBody.appendChild(row);
+    <script>
+        $(document).ready(function() {
+            function populateTable(data) {
+                const tbody = $('#data-table tbody');
+                tbody.empty();
+
+                if (data.length === 0) {
+                    tbody.append('<tr><td colspan="11">No data found</td></tr>');
+                } else {
+                    data.forEach(item => {
+                        const row = `
+                            <tr>
+                                <td>${item.username}</td>
+                                <td>${item.user_id}</td>
+                                <td>${item.full_name}</td>
+                                <td>${item.biography}</td>
+                                <td>${item.external_url}</td>
+                                <td>${item.email}</td>
+                                <td>${item.phone_number}</td>
+                                <td>${item.followees}</td>
+                                <td>${item.followers}</td>
+                                <td>${item.is_private}</td>
+                                <td>${item.is_verified}</td>
+                            </tr>
+                        `;
+                        tbody.append(row);
+                    });
+                }
+            }
+
+            $('#fetch-followers').on('click', function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/fetch-followers-data/',
+                    beforeSend: function() {
+                        $('#loading-row').show();
+                    },
+                    success: function(response) {
+                        $('#loading-row').hide();
+                        populateTable(response.followers_data);
+                    },
+                    error: function(error) {
+                        $('#loading-row').hide();
+                        console.error('An error occurred: ' + error.responseJSON.error);
+                    }
                 });
+            });
 
-            } catch (error) {
-                console.error('Error fetching data:', error);
-            }
-        }
-</script> -->
-
-
-   <script>
-    document.getElementById('instagram-scraper-form').addEventListener('submit', function(event) {
-    event.preventDefault();
-
-    const selectedOption = document.querySelector('input[name="data_type"]:checked');
-
-    if (!selectedOption) {
-        alert('Please select an option.');
-        return;
-    }
-
-    const apiUrl = selectedOption.value === 'followers' ? '/followers' : '/followings';
-
-    console.log("API URL:", apiUrl);
-
-    // Show loading row
-    const tableBody = document.querySelector('#data-table tbody');
-    tableBody.innerHTML = '<tr id="loading-row"><td colspan="6">Loading...</td></tr>';
-
-    // Initialize empty response counter
-    let emptyResponseCounter = 0;
-
-    // Fetch and update data
-    fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter);
-});
-
-function fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter) {
-    fetch(apiUrl, {
-        method: 'GET',
-        headers: {
-            'Content-Type': 'application/json',
-            'X-CSRFToken': getCookie('csrftoken')
-        }
-    })
-    .then(response => {
-        if (!response.ok) {
-            throw new Error('Network response was not ok ' + response.statusText);
-        }
-        return response.json();
-    })
-    .then(data => {
-        console.log("Received data:", data);
-        if (data.error) {
-            alert('Error: ' + data.error);
-            return;
-        }
-
-        const newData = data.followers || data.followings;
-
-        if (newData.length > 0) {
-            emptyResponseCounter = 0; // Reset the counter when data is received
-            populateTable(newData, tableBody);
-            fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter); // Recursively call with updated counter
-        } else {
-            emptyResponseCounter += 1; // Increment the counter for empty response
-            if (emptyResponseCounter >= 2) {
-                alert('No more data to load.');
-                document.getElementById('loading-row').remove(); // Remove loading row when done
-            } else {
-                fetchAndUpdateData(apiUrl, tableBody, emptyResponseCounter); // Recursively call with updated counter
-            }
-        }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        alert('An error occurred: ' + error.message);
-        document.getElementById('loading-row').remove(); // Remove loading row on error
-    });
-}
-
-
-function populateTable(data, tableBody) {
-    if (!data || !Array.isArray(data)) {
-        console.error('Invalid data received:', data);
-        alert('Invalid data received from the server.');
-        return;
-    }
-
-    data.forEach(item => {
-        const row = document.createElement('tr');
-        row.innerHTML = `
-            <td>${item.username || '-'}</td>
-            <td>${item.User_id || '-'}</td>
-            <td>${item.full_name || '-'}</td>
-            <td>${item.biography || '-'}</td>
-            <td>${item.external_url || '-'}</td>
-            <td>${item.email || '-'}</td>
-            <td>${item.phone_number || '-'}</td>
-            <td>${item.followees || '-'}</td>
-            <td>${item.followers || '-'}</td>
-            <td>${item.is_private ? 'Yes' : 'No'}</td>
-            <td>${item.is_verified ? 'Yes' : 'No'}</td>
-        `;
-        tableBody.appendChild(row);
-    });
-}
-
-
-
-
-function getCookie(name) {
-    let cookieValue = null;
-    if (document.cookie && document.cookie !== '') {
-        const cookies = document.cookie.split(';');
-        for (let i = 0; i < cookies.length; i++) {
-            const cookie = cookies[i].trim();
-            if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                break;
-            }
-        }
-    }
-    return cookieValue;
-}
-</script>
-
+            $('#fetch-followings').on('click', function() {
+                $.ajax({
+                    type: 'GET',
+                    url: '/fetch-followings-data/',
+                    beforeSend: function() {
+                        $('#loading-row').show();
+                    },
+                    success: function(response) {
+                        $('#loading-row').hide();
+                        populateTable(response.followings_data);
+                    },
+                    error: function(error) {
+                        $('#loading-row').hide();
+                        console.error('An error occurred: ' + error.responseJSON.error);
+                    }
+                });
+            });
+        });
+    </script>
 
 
 
