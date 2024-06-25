@@ -16,12 +16,13 @@ urlpatterns = [
     path('logout/', views.user_logout, name='logout'),
     path('login', views.insta_login, name='insta_login'),
     path('instagram/', views.instagram_scrapper, name='instagram'),
-    # path('followings', views.get_followers, name='user_followers'),
-    # path('followers', views.get_following, name='user_followings'),
+    path('scrape-data/', views.scrape_data, name='scrape_data'),
+
     path('user_profile', views.user_details, name='user_profile'),
     path('proxy-instagram-image/', views.proxy_instagram_image, name='proxy_instagram_image'),
-    path('followers', views.get_followers, name='user_followers'),
-    path('followings', views.get_followings, name='user_followings'),
+    path('fetch-followers-data/', views.fetch_followers_data, name='fetch_followers_data'),
+    path('fetch-followings-data/', views.fetch_followings_data, name='fetch_followings_data'),
+
 
 
 
