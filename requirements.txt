@@ -1,3 +1,17 @@
 Django==4.2  
 instaloader==4.11  
 python==3.11.1
+asgiref
+asttokens==2.4.1
+certifi==2024.6.2
+charset-normalizer==3.3.2
+comm==0.2.2
+debugpy==1.8.1
+decorator==5.1.1
+Django==5.0.6
+executing==2.0.1
+geographiclib==2.0
+geopy==2.4.1
+idna==3.7
+instaloader==4.11
+instagram-private-api==1.6.0.0

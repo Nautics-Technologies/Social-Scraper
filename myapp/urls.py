@@ -9,6 +9,7 @@ from django.contrib.auth import views as auth_views
 # LOGIN_REDIRECT_URL = reverse_lazy('')
 
 urlpatterns = [
+    
     path('home/', views.home, name='home'),
     path('integration/', views.integration, name='integration'),
     path('', views.login_view, name='login'),
