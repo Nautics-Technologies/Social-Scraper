@@ -14,7 +14,8 @@ from .email import Osintgram # Ensure this imports the updated Osintgram class
 from urllib3.exceptions import ProtocolError, SSLError
 import re
 from .models import ScrapedData
-# Define regex patterns
+
+
 email_pattern = re.compile(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b')
 phone_pattern = re.compile(r'\b(?:\+?(\d{1,3})?[-.\s]?)?(\d{1,4})[-.\s]?(\d{1,4})[-.\s]?(\d{1,9})\b')
 
@@ -119,13 +120,13 @@ def insta_login(request):
                     request.session['username'] = username
                     request.session['password'] = password
                     logged_in_user = username
-                    return redirect('instagram')
+                    return redirect('instagram') # Return success message
                 except instaloader.exceptions.BadCredentialsException:
                     return redirect('home')
                 except Exception as e:
                     time.sleep(10)  # Wait before retrying
 
-            return JsonResponse({'error': 'Login failed: Could not log in after several attempts'}, status=400)
+            return JsonResponse({'error': 'Maximum login attempts exceeded.'}, status=400)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)

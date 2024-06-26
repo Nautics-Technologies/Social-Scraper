@@ -25,7 +25,13 @@ SECRET_KEY = 'django-insecure-0an+4#m8h)-nd=ih7j#havbse#cwbd(9x=$&jfpccw@*k*6&ue
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['social-scraper2.rsjifotechou.com','127.0.0.1',]
+ALLOWED_HOSTS = ['social-scraper2.rsjifotechou.com','5.180.148.120','127.0.0.1']
+
+CSRF_TRUSTED_ORIGINS = [
+    'http://social-scraper2.rsjifotechou.com',
+    'https://social-scraper2.rsjifotechou.com'
+]
+
 
 
 LOGIN_URL = '/login/'
@@ -135,15 +141,9 @@ STATICFILES_DIRS = [
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-# settings.py
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = ''
-EMAIL_HOST_PASSWORD = ''
+
+
 
 
 
