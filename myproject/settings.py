@@ -27,6 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['social-scraper2.rsjifotechou.com','5.180.148.120','127.0.0.1']
 
+
 CSRF_TRUSTED_ORIGINS = [
     'http://social-scraper2.rsjifotechou.com',
     'https://social-scraper2.rsjifotechou.com'
