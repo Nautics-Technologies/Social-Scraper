@@ -99,11 +99,20 @@ max_failed_attempts = 2
 logged_in_user = None
 
 
+# Global variables to store login session
+logged_in_user = None
+L = instaloader.Instaloader()
+
+
+
+from django.shortcuts import get_object_or_404
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+from .models import InstagramProfile
+import instaloader
 
 @csrf_exempt
-def insta_login(request):
-    global logged_in_user, L
-
+def login_and_save_instagram_profile(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
@@ -112,55 +121,50 @@ def insta_login(request):
             if not username or not password:
                 return JsonResponse({'error': 'Username and password are required.'}, status=400)
 
-            for attempt in range(login_attempts):
-                set_proxy()
-                try:
-                    L.login(username, password)
+            L = instaloader.Instaloader()
 
-                    request.session['username'] = username
-                    request.session['password'] = password
-                    logged_in_user = username
-                    return redirect('instagram') # Return success message
-                except instaloader.exceptions.BadCredentialsException:
-                    return redirect('home')
-                except Exception as e:
-                    time.sleep(10)  # Wait before retrying
+            set_proxy()
 
-            return JsonResponse({'error': 'Maximum login attempts exceeded.'}, status=400)
+            try:
+                L.login(username, password)
+                request.session['username'] = username
+                request.session['password'] = password
+            except instaloader.exceptions.BadCredentialsException:
+                return JsonResponse({'error': 'Bad credentials'}, status=400)
+            except Exception as e:
+                return JsonResponse({'error': 'Login unsuccessful'}, status=400)
+
+            # Check if the profile already exists in the database after successful login
+            if InstagramProfile.objects.filter(username=username).exists():
+                return JsonResponse({'message': 'User already exists in the database'}, status=200)
+
+            try:
+                profile = instaloader.Profile.from_username(L.context, username)
+
+                # Save profile data to database
+                InstagramProfile.objects.create(
+                    username=profile.username,
+                    user_id=profile.userid,
+                    full_name=profile.full_name,
+                    bio=profile.biography,
+                    profile_pic=profile.profile_pic_url,
+                    email="None",
+                    phone="None",
+                    followers=profile.followers,
+                    followings=profile.followees,
+                    total_posts=profile.mediacount,
+                    external_url=profile.external_url if profile.external_url else "",  # Handle missing field
+                )
+
+                return JsonResponse({'message': 'Profile data saved successfully'}, status=200)
+            except Exception as e:
+                return JsonResponse({'error': str(e)}, status=400)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
 
-
-def user_details(request):
-    global logged_in_user, L
-    if request.method == 'GET':
-        try:
-            if not logged_in_user:
-                return JsonResponse({'error': 'User not logged in.'}, status=400)
-            
-            profile = instaloader.Profile.from_username(L.context, logged_in_user)
-
-            profile_info = {
-                'username': profile.username,
-                'User_id': profile.userid,
-                'full_name': profile.full_name,
-                'bio': profile.biography,
-                'profile_pic': profile.profile_pic_url,
-                'email': "None",
-                'phone': "None",
-                'followers': profile.followers,
-                'followings': profile.followees,
-                'total_posts': profile.mediacount,
-                'external_url': profile.external_url,
-            }
-
-            return JsonResponse({'profile_data': profile_info}, status=200)
-
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=400)
 
 def proxy_instagram_image(request):
     """
@@ -195,11 +199,6 @@ ssl._create_default_https_context = ssl._create_unverified_context
 # Initialize Instaloader
 L = instaloader.Instaloader()
 
-# Constants
-login_attempts = 1
-scrape_duration = 50  # Duration for each scraping session in seconds
-pause_duration = 3 * 60  # Pause duration between scraping sessions in seconds
-max_failed_attempts = 2  # Maximum number of failed scraping sessions before stopping
 
 
 def fetch_proxies():
@@ -211,12 +210,19 @@ def fetch_proxies():
 
 proxies = fetch_proxies()
 
+
 # Function to set proxy
 def set_proxy():
     proxy = random.choice(proxies)
     proxy_url = f"http://{proxy}"
+    # Check if proxy_url already starts with 'http://'
+    if proxy_url.startswith('http://http://'):
+        proxy_url = proxy_url.replace('http://http://', 'http://')
     L.context._session.proxies = {'http': proxy_url, 'https': proxy_url}
     print(f"Using proxy: {proxy_url}")
+
+
+
 
 # Function to login to Instagram
 def instaloader_login(username, password):
@@ -426,4 +432,36 @@ def fetch_followings_data(request):
     return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 
-    
+@csrf_exempt
+def user_details(request):
+    if request.method == 'GET':
+        # Assuming the username is stored in the session
+        username = request.session.get('username')
+
+        if not username:
+            return JsonResponse({'error': 'User not logged in.'}, status=400)
+
+        try:
+            profile = InstagramProfile.objects.get(username=username)
+
+            profile_info = {
+                'username': profile.username,
+                'user_id': profile.user_id,
+                'full_name': profile.full_name,
+                'bio': profile.bio,
+                'profile_pic': profile.profile_pic,
+                'email': profile.email,
+                'phone': profile.phone,
+                'followers': profile.followers,
+                'followings': profile.followings,
+                'total_posts': profile.total_posts,
+                'external_url': profile.external_url,
+            }
+
+            return JsonResponse({'profile_data': profile_info}, status=200)
+        except InstagramProfile.DoesNotExist:
+            return JsonResponse({'error': 'Profile not found.'}, status=404)
+        except Exception as e:
+            return JsonResponse({'error': str(e)}, status=500)
+
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
