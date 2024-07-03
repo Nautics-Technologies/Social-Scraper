@@ -191,10 +191,7 @@
 
                                         </div>
                                     </div>
-                                    <!-- <div class="form-group text-center">
-                                        <button type="submit"
-                                            class="btn bg-braned text-white btn-rounded mt-10">Submit</button>
-                                    </div> -->
+
                                 </div>
                         </div>
                         </form>
@@ -213,13 +210,6 @@
 
 
 
-
-                            <!-- <form method="post" action="{% url 'scrape_data' %}" style="display: inline-flex;">
-                                {% csrf_token %}
-                                <button type="submit"
-                                    style="background-color: #4CAF50; color: white; padding: 10px 20px; border: none; cursor: pointer;">Scrape
-                                    Data</button>
-                            </form> -->
 
 
 
@@ -261,98 +251,6 @@
     <div class="control-sidebar-bg"></div>
     </div>
 
-
-
-
-
-    <script>
-        $('#scrape-button').on('click', function() {
-            $.ajax({
-                url: "{% url 'scrape_data' %}",
-                type: 'POST',
-                data: {
-                    csrfmiddlewaretoken: '{{ csrf_token }}'
-                },
-                success: function(response) {
-                    alert(response.message);
-                },
-                error: function() {
-                    alert('An error occurred.');
-                }
-            });
-        });
-    </script>
-
-
-
-
-    <script>
-        $(document).ready(function() {
-            function populateTable(data) {
-                const tbody = $('#data-table tbody');
-                tbody.empty();
-
-                if (data.length === 0) {
-                    tbody.append('<tr><td colspan="11">No data found</td></tr>');
-                } else {
-                    data.forEach(item => {
-                        const row = `
-                            <tr>
-                                <td>${item.username}</td>
-                                <td>${item.user_id}</td>
-                                <td>${item.full_name}</td>
-                                <td>${item.biography}</td>
-                                <td>${item.external_url}</td>
-                                <td>${item.email}</td>
-                                <td>${item.phone_number}</td>
-                                <td>${item.followees}</td>
-                                <td>${item.followers}</td>
-                                <td>${item.is_private}</td>
-                                <td>${item.is_verified}</td>
-                            </tr>
-                        `;
-                        tbody.append(row);
-                    });
-                }
-            }
-
-            $('#fetch-followers').on('click', function() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/fetch-followers-data/',
-                    beforeSend: function() {
-                        $('#loading-row').show();
-                    },
-                    success: function(response) {
-                        $('#loading-row').hide();
-                        populateTable(response.followers_data);
-                    },
-                    error: function(error) {
-                        $('#loading-row').hide();
-                        console.error('An error occurred: ' + error.responseJSON.error);
-                    }
-                });
-            });
-
-            $('#fetch-followings').on('click', function() {
-                $.ajax({
-                    type: 'GET',
-                    url: '/fetch-followings-data/',
-                    beforeSend: function() {
-                        $('#loading-row').show();
-                    },
-                    success: function(response) {
-                        $('#loading-row').hide();
-                        populateTable(response.followings_data);
-                    },
-                    error: function(error) {
-                        $('#loading-row').hide();
-                        console.error('An error occurred: ' + error.responseJSON.error);
-                    }
-                });
-            });
-        });
-    </script>
 
 
 
