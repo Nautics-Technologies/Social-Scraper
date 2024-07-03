@@ -6,7 +6,7 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 import requests
 from django.views.decorators.csrf import csrf_exempt
-import instaloader
+
 import json
 import time
 import logging
@@ -79,40 +79,27 @@ def user_logout(request):
     return redirect('login')
 
 
-import instaloader
+
+import os
+import random
 import time
-import json
-from django.http import JsonResponse, HttpResponse
-from django.views.decorators.csrf import csrf_exempt
-from django.shortcuts import render
-from urllib3.exceptions import ProtocolError, SSLError
-import requests
-
-# Initialize Instaloader
-L = instaloader.Instaloader()
-
-# Constants
-login_attempts = 1
-scrape_duration = 50  # Duration for each scraping session in seconds
-pause_duration = 3 * 60  # Pause duration between scraping sessions in seconds
-max_failed_attempts = 2
-logged_in_user = None
-
-
-# Global variables to store login session
-logged_in_user = None
-L = instaloader.Instaloader()
-
-
-
-from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
+from instagrapi import Client
+from instagrapi.exceptions import LoginRequired, BadPassword
+import logging
 from .models import InstagramProfile
-import instaloader
+
+logger = logging.getLogger()
+
+# Ensure the sessions directory exists
+SESSIONS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'sessions')
+if not os.path.exists(SESSIONS_DIR):
+    os.makedirs(SESSIONS_DIR)
+
 
 @csrf_exempt
-def login_and_save_instagram_profile(request):
+def login_and_save_session(request):
     if request.method == 'POST':
         try:
             username = request.POST.get('username')
@@ -120,316 +107,50 @@ def login_and_save_instagram_profile(request):
 
             if not username or not password:
                 return JsonResponse({'error': 'Username and password are required.'}, status=400)
-
-            L = instaloader.Instaloader()
-
-            set_proxy()
-
+            
             try:
-                L.login(username, password)
+                cl = Client()
+                cl.login(username, password)
+                session_file = os.path.join(SESSIONS_DIR, f"{username}_session.json")
+                cl.dump_settings(session_file)
+                get_and_save_instagram_profile(cl, username)
                 request.session['username'] = username
-                request.session['password'] = password
-            except instaloader.exceptions.BadCredentialsException:
-                return JsonResponse({'error': 'Bad credentials'}, status=400)
-            except Exception as e:
-                return JsonResponse({'error': 'Login unsuccessful'}, status=400)
-
-            # Check if the profile already exists in the database after successful login
-            if InstagramProfile.objects.filter(username=username).exists():
-                return JsonResponse({'message': 'User already exists in the database'}, status=200)
-
-            try:
-                profile = instaloader.Profile.from_username(L.context, username)
-
-                # Save profile data to database
-                InstagramProfile.objects.create(
-                    username=profile.username,
-                    user_id=profile.userid,
-                    full_name=profile.full_name,
-                    bio=profile.biography,
-                    profile_pic=profile.profile_pic_url,
-                    email="None",
-                    phone="None",
-                    followers=profile.followers,
-                    followings=profile.followees,
-                    total_posts=profile.mediacount,
-                    external_url=profile.external_url if profile.external_url else "",  # Handle missing field
-                )
-
-                return JsonResponse({'message': 'Profile data saved successfully'}, status=200)
+                return JsonResponse({'message': 'Login successful'}, status=200)
+            
             except Exception as e:
                 return JsonResponse({'error': str(e)}, status=400)
 
         except Exception as e:
             return JsonResponse({'error': str(e)}, status=400)
 
-    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+    return JsonResponse({'error': 'Invalid HTTP method'}, status=405)  
 
 
-def proxy_instagram_image(request):
-    """
-    Proxy view to fetch Instagram profile picture.
-    """
-    image_url = request.GET.get('url')
-    if not image_url:
-        return HttpResponse(status=400)
+def get_and_save_instagram_profile(client, username):
+    try:
+        profile = client.user_info_by_username(username)
+        time.sleep(random.uniform(1, 3))  # Add random delay to mimic human behavior
 
-    response = requests.get(image_url)
-    if response.status_code == 200:
-        content_type = response.headers['Content-Type']
-        return HttpResponse(response.content, content_type=content_type)
-    return HttpResponse(status=response.status_code)
-
-
-from django.shortcuts import render
-from django.http import JsonResponse
-from django.views.decorators.csrf import csrf_exempt
-from .models import ScrapedData
-import instaloader
-import random
-import time
-import json
-import ssl
-from urllib3.exceptions import ProtocolError, SSLError
-import requests
-import threading
-
-ssl._create_default_https_context = ssl._create_unverified_context
-
-# Initialize Instaloader
-L = instaloader.Instaloader()
-
-
-
-def fetch_proxies():
-    proxy_api_url = 'https://proxylist.geonode.com/api/proxy-list?limit=500&page=1&sort_by=lastChecked&sort_type=desc'
-    response = requests.get(proxy_api_url)
-    proxy_list = response.json()['data']
-    proxies = [f"{proxy['ip']}:{proxy['port']}" for proxy in proxy_list]
-    return proxies
-
-proxies = fetch_proxies()
-
-
-# Function to set proxy
-def set_proxy():
-    proxy = random.choice(proxies)
-    proxy_url = f"http://{proxy}"
-    # Check if proxy_url already starts with 'http://'
-    if proxy_url.startswith('http://http://'):
-        proxy_url = proxy_url.replace('http://http://', 'http://')
-    L.context._session.proxies = {'http': proxy_url, 'https': proxy_url}
-    print(f"Using proxy: {proxy_url}")
-
-
-
-
-# Function to login to Instagram
-def instaloader_login(username, password):
-    for attempt in range(login_attempts):
-        set_proxy()  # Set a proxy before each login attempt
-        try:
-            L.login(username, password)
-            print(f"Logged in (attempt {attempt + 1})")
-            return True
-        except Exception as e:
-            print(f"Login failed on attempt {attempt + 1}: {e}")
-            time.sleep(10)  # Wait before retrying
-    return False
-
-
-def save_data_to_db(data, profile_owner, data_type):
-    for user in data:
-        ScrapedData.objects.create(
-            username=user['username'],
-            user_id=user['User-id'],
-            full_name=user['full_name'],
-            profile_pic_url=user['profile_pic_url'],
-            is_verified=user['is_verified'],
-            is_private=user['is_private'],
-            biography=user['biography'],
-            external_url=user['external_url'],
-            followers=user['followers'],
-            followees=user['followees'],
-            email=user['email'],
-            phone_number=user['phone_number'],
-            data_type=data_type,
-            profile_owner=profile_owner
+        # Save profile data to the database
+        InstagramProfile.objects.create(
+            username=profile.username,
+            user_id=profile.pk,
+            full_name=profile.full_name,
+            bio=profile.biography,
+            profile_pic=profile.profile_pic_url,
+            email=profile.public_email or "None",
+            phone=profile.public_phone_number or "None",
+            followers=profile.follower_count,
+            followings=profile.following_count,
+            total_posts=profile.media_count,
+            external_url=profile.external_url or "",  # Handle missing field
         )
 
-def get_profile_data(profile, max_seconds, data_type, osintgram_instance, processed_usernames):
-    data = []
-    start_time = time.time()
-
-    try:
-        if data_type == "followers":
-            iterator = profile.get_followers()
-        elif data_type == "followings":
-            iterator = profile.get_followees()
-        else:
-            return data
-        
-        for user in iterator:
-            if time.time() - start_time > max_seconds:
-                break
-            
-            if user.username in processed_usernames:
-                continue  # Skip already processed usernames
-
-            try:
-                email, phone_number = osintgram_instance.get_user_contact_info(user.username)
-            except Exception as e:
-                print(f"Error fetching contact info for {user.username}: {e}")
-                email, phone_number = '', ''
-
-            # Extract email and phone number from biography if not found by Osintgram
-            if not email:
-                email_match = email_pattern.search(user.biography or "")
-                email = email_match.group(0) if email_match else ''
-
-            if not phone_number:
-                phone_match = phone_pattern.search(user.biography or "")
-                phone_number = phone_match.group(0) if phone_match else ''
-
-            user_info = {
-                "username": user.username,
-                "User-id" : user.userid,
-                "full_name": user.full_name,
-                "profile_pic_url": user.profile_pic_url,
-                "is_verified": user.is_verified,
-                "is_private": user.is_private if hasattr(user, 'is_private') else None,  # Handle if attribute is not available
-                "biography": user.biography,
-                "external_url": user.external_url,
-                "followers": user.followers,
-                "followees": user.followees,
-                "email": email,
-                "phone_number": phone_number
-            }
-            data.append(user_info)
-            processed_usernames.add(user.username)  # Add username to processed set
-
-    except (instaloader.exceptions.ConnectionException, TimeoutError, ProtocolError, SSLError) as e:
-        print(f"Connection exception occurred while scraping {data_type}: {e}")
-    except instaloader.exceptions.QueryReturnedBadRequestException as e:
-        print(f"Instagram API returned a bad request error: {e}")
-
-    return data
+        return JsonResponse({'message': 'Profile data saved successfully'}, status=200)
+    except Exception as e:
+        return JsonResponse({'error': str(e)}, status=400)
 
 
-@csrf_exempt
-def scrape_data(request):
-    if request.method == 'POST':
-        username = request.session.get('username')
-        password = request.session.get('password')
-
-        if ScrapedData.objects.filter(profile_owner=username).exists():
-            return JsonResponse({'status': 'exists', 'message': 'Data is already present in the database. You can see it or start scraping again.'})
-
-        
-        # profile_name = request.POST.get('profile_name')
-        osintgram_instance = Osintgram(username, password)
-
-        if not instaloader_login(username, password):
-            return JsonResponse({"error": "Failed to log in after multiple attempts."}, status=500)
-
-        # Get the target profile
-        profile = instaloader.Profile.from_username(L.context, username)
-
-        # Create a set of processed usernames to avoid duplicates
-        processed_usernames = set()
-
-        # Get initial followers and followings count
-        total_followers_count = profile.followers
-        total_following_count = profile.followees
-        print(f"Total followers: {total_followers_count}")
-        print(f"Total followings: {total_following_count}")
-
-        failed_attempts = 0
-
-        while True:
-            if failed_attempts >= max_failed_attempts:
-                print("Maximum failed attempts reached. Stopping scraping.")
-                break
-
-            print("Scraping followers...")
-            set_proxy()  # Set a new proxy for each scraping session
-            followers = get_profile_data(profile, scrape_duration, "followers", osintgram_instance, processed_usernames)
-            if followers:
-                save_data_to_db(followers, username, "followers")
-                print(f"Collected {len(followers)} followers this session.")
-            else:
-                print("No new followers collected this session.")
-                failed_attempts += 1
-
-            print("Scraping followings...")
-            set_proxy()  # Set a new proxy for each scraping session
-            followings = get_profile_data(profile, scrape_duration, "followings", osintgram_instance, processed_usernames)
-            if followings:
-                save_data_to_db(followings, username, "followings")
-                print(f"Collected {len(followings)} followings this session.")
-            else:
-                print("No new followings collected this session.")
-                failed_attempts += 1
-
-            if failed_attempts >= max_failed_attempts:
-                print("Maximum failed attempts reached. Stopping scraping.")
-                break
-
-            # Pause between scraping sessions
-            print(f"Pausing for {pause_duration / 60} minutes before next session.")
-            time.sleep(pause_duration)
-
-            # Re-login to ensure session validity
-            if not instaloader_login(username, password):
-                print("Re-login failed.")
-                failed_attempts += 1
-            else:
-                failed_attempts = 0  # Reset failed attempts after a successful login
-
-        print("Completed scraping.")
-        L.close()
-
-        return JsonResponse({"message": "Scraping completed successfully."})
-
-
-
-
-from .models import ScrapedData
-
-def fetch_followers_data(request):
-    if request.method == 'GET':
-        username = request.session.get('username')
-        if not username:
-            return JsonResponse({'error': 'User not logged in or session expired.'}, status=400)
-
-        followers_data = ScrapedData.objects.filter(profile_owner=username, data_type='followers')
-        followers_list = list(followers_data.values(
-            'username', 'user_id', 'full_name', 'profile_pic_url', 'is_verified',
-            'is_private', 'biography', 'external_url', 'followers', 'followees',
-            'email', 'phone_number'
-        ))
-
-        return JsonResponse({'followers_data': followers_list}, status=200)
-
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
-
-
-def fetch_followings_data(request):
-    if request.method == 'GET':
-        username = request.session.get('username')
-        if not username:
-            return JsonResponse({'error': 'User not logged in or session expired.'}, status=400)
-
-        followings_data = ScrapedData.objects.filter(profile_owner=username, data_type='followings')
-        followings_list = list(followings_data.values(
-            'username', 'user_id', 'full_name', 'profile_pic_url', 'is_verified',
-            'is_private', 'biography', 'external_url', 'followers', 'followees',
-            'email', 'phone_number'
-        ))
-
-        return JsonResponse({'followings_data': followings_list}, status=200)
-
-    return JsonResponse({'error': 'Invalid request method.'}, status=400)
 
 
 @csrf_exempt
@@ -465,3 +186,402 @@ def user_details(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+
+
+
+def proxy_instagram_image(request):
+
+    image_url = request.GET.get('url')
+    if not image_url:
+        return HttpResponse(status=400)
+
+    response = requests.get(image_url)
+    if response.status_code == 200:
+        content_type = response.headers['Content-Type']
+        return HttpResponse(response.content, content_type=content_type)
+    return HttpResponse(status=response.status_code)
+
+
+
+
+
+
+
+
+
+
+
+# import instaloader
+# import time
+# import json
+# from django.http import JsonResponse, HttpResponse
+# from django.views.decorators.csrf import csrf_exempt
+# from django.shortcuts import render
+# from urllib3.exceptions import ProtocolError, SSLError
+# import requests
+
+# # Initialize Instaloader
+# L = instaloader.Instaloader()
+
+# # Constants
+# login_attempts = 1
+# scrape_duration = 50  # Duration for each scraping session in seconds
+# pause_duration = 3 * 60  # Pause duration between scraping sessions in seconds
+# max_failed_attempts = 2
+# logged_in_user = None
+
+
+# # Global variables to store login session
+# logged_in_user = None
+# L = instaloader.Instaloader()
+
+
+
+# from django.shortcuts import get_object_or_404
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# from .models import InstagramProfile
+# import instaloader
+
+# @csrf_exempt
+# def login_and_save_instagram_profile(request):
+#     if request.method == 'POST':
+#         try:
+#             username = request.POST.get('username')
+#             password = request.POST.get('password')
+
+#             if not username or not password:
+#                 return JsonResponse({'error': 'Username and password are required.'}, status=400)
+
+#             L = instaloader.Instaloader()
+
+#             set_proxy()
+
+#             try:
+#                 L.login(username, password)
+#                 request.session['username'] = username
+#                 request.session['password'] = password
+#             except instaloader.exceptions.BadCredentialsException:
+#                 return JsonResponse({'error': 'Bad credentials'}, status=400)
+#             except Exception as e:
+#                 return JsonResponse({'error': 'Login unsuccessful'}, status=400)
+
+#             # Check if the profile already exists in the database after successful login
+#             if InstagramProfile.objects.filter(username=username).exists():
+#                 return JsonResponse({'message': 'User already exists in the database'}, status=200)
+
+#             try:
+#                 profile = instaloader.Profile.from_username(L.context, username)
+
+#                 # Save profile data to database
+#                 InstagramProfile.objects.create(
+#                     username=profile.username,
+#                     user_id=profile.userid,
+#                     full_name=profile.full_name,
+#                     bio=profile.biography,
+#                     profile_pic=profile.profile_pic_url,
+#                     email="None",
+#                     phone="None",
+#                     followers=profile.followers,
+#                     followings=profile.followees,
+#                     total_posts=profile.mediacount,
+#                     external_url=profile.external_url if profile.external_url else "",  # Handle missing field
+#                 )
+
+#                 return JsonResponse({'message': 'Profile data saved successfully'}, status=200)
+#             except Exception as e:
+#                 return JsonResponse({'error': str(e)}, status=400)
+
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=400)
+
+#     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
+
+
+
+
+
+# from django.shortcuts import render
+# from django.http import JsonResponse
+# from django.views.decorators.csrf import csrf_exempt
+# from .models import ScrapedData
+# import instaloader
+# import random
+# import time
+# import json
+# import ssl
+# from urllib3.exceptions import ProtocolError, SSLError
+# import requests
+# import threading
+
+# ssl._create_default_https_context = ssl._create_unverified_context
+
+# # Initialize Instaloader
+# L = instaloader.Instaloader()
+
+
+
+# def fetch_proxies():
+#     proxy_api_url = 'https://proxylist.geonode.com/api/proxy-list?limit=500&page=1&sort_by=lastChecked&sort_type=desc'
+#     response = requests.get(proxy_api_url)
+#     proxy_list = response.json()['data']
+#     proxies = [f"{proxy['ip']}:{proxy['port']}" for proxy in proxy_list]
+#     return proxies
+
+# proxies = fetch_proxies()
+
+
+# # Function to set proxy
+# def set_proxy():
+#     proxy = random.choice(proxies)
+#     proxy_url = f"http://{proxy}"
+#     # Check if proxy_url already starts with 'http://'
+#     if proxy_url.startswith('http://http://'):
+#         proxy_url = proxy_url.replace('http://http://', 'http://')
+#     L.context._session.proxies = {'http': proxy_url, 'https': proxy_url}
+#     print(f"Using proxy: {proxy_url}")
+
+
+
+
+# # Function to login to Instagram
+# def instaloader_login(username, password):
+#     for attempt in range(login_attempts):
+#         set_proxy()  # Set a proxy before each login attempt
+#         try:
+#             L.login(username, password)
+#             print(f"Logged in (attempt {attempt + 1})")
+#             return True
+#         except Exception as e:
+#             print(f"Login failed on attempt {attempt + 1}: {e}")
+#             time.sleep(10)  # Wait before retrying
+#     return False
+
+
+# def save_data_to_db(data, profile_owner, data_type):
+#     for user in data:
+#         ScrapedData.objects.create(
+#             username=user['username'],
+#             user_id=user['User-id'],
+#             full_name=user['full_name'],
+#             profile_pic_url=user['profile_pic_url'],
+#             is_verified=user['is_verified'],
+#             is_private=user['is_private'],
+#             biography=user['biography'],
+#             external_url=user['external_url'],
+#             followers=user['followers'],
+#             followees=user['followees'],
+#             email=user['email'],
+#             phone_number=user['phone_number'],
+#             data_type=data_type,
+#             profile_owner=profile_owner
+#         )
+
+# def get_profile_data(profile, max_seconds, data_type, osintgram_instance, processed_usernames):
+#     data = []
+#     start_time = time.time()
+
+#     try:
+#         if data_type == "followers":
+#             iterator = profile.get_followers()
+#         elif data_type == "followings":
+#             iterator = profile.get_followees()
+#         else:
+#             return data
+        
+#         for user in iterator:
+#             if time.time() - start_time > max_seconds:
+#                 break
+            
+#             if user.username in processed_usernames:
+#                 continue  # Skip already processed usernames
+
+#             try:
+#                 email, phone_number = osintgram_instance.get_user_contact_info(user.username)
+#             except Exception as e:
+#                 print(f"Error fetching contact info for {user.username}: {e}")
+#                 email, phone_number = '', ''
+
+#             # Extract email and phone number from biography if not found by Osintgram
+#             if not email:
+#                 email_match = email_pattern.search(user.biography or "")
+#                 email = email_match.group(0) if email_match else ''
+
+#             if not phone_number:
+#                 phone_match = phone_pattern.search(user.biography or "")
+#                 phone_number = phone_match.group(0) if phone_match else ''
+
+#             user_info = {
+#                 "username": user.username,
+#                 "User-id" : user.userid,
+#                 "full_name": user.full_name,
+#                 "profile_pic_url": user.profile_pic_url,
+#                 "is_verified": user.is_verified,
+#                 "is_private": user.is_private if hasattr(user, 'is_private') else None,  # Handle if attribute is not available
+#                 "biography": user.biography,
+#                 "external_url": user.external_url,
+#                 "followers": user.followers,
+#                 "followees": user.followees,
+#                 "email": email,
+#                 "phone_number": phone_number
+#             }
+#             data.append(user_info)
+#             processed_usernames.add(user.username)  # Add username to processed set
+
+#     except (instaloader.exceptions.ConnectionException, TimeoutError, ProtocolError, SSLError) as e:
+#         print(f"Connection exception occurred while scraping {data_type}: {e}")
+#     except instaloader.exceptions.QueryReturnedBadRequestException as e:
+#         print(f"Instagram API returned a bad request error: {e}")
+
+#     return data
+
+
+# @csrf_exempt
+# def scrape_data(request):
+#     if request.method == 'POST':
+#         username = request.session.get('username')
+#         password = request.session.get('password')
+
+#         if ScrapedData.objects.filter(profile_owner=username).exists():
+#             return JsonResponse({'status': 'exists', 'message': 'Data is already present in the database. You can see it or start scraping again.'})
+
+        
+#         # profile_name = request.POST.get('profile_name')
+#         osintgram_instance = Osintgram(username, password)
+
+#         if not instaloader_login(username, password):
+#             return JsonResponse({"error": "Failed to log in after multiple attempts."}, status=500)
+
+#         # Get the target profile
+#         profile = instaloader.Profile.from_username(L.context, username)
+
+#         # Create a set of processed usernames to avoid duplicates
+#         processed_usernames = set()
+
+#         # Get initial followers and followings count
+#         total_followers_count = profile.followers
+#         total_following_count = profile.followees
+#         print(f"Total followers: {total_followers_count}")
+#         print(f"Total followings: {total_following_count}")
+
+#         failed_attempts = 0
+
+#         while True:
+#             if failed_attempts >= max_failed_attempts:
+#                 print("Maximum failed attempts reached. Stopping scraping.")
+#                 break
+
+#             print("Scraping followers...")
+#             set_proxy()  # Set a new proxy for each scraping session
+#             followers = get_profile_data(profile, scrape_duration, "followers", osintgram_instance, processed_usernames)
+#             if followers:
+#                 save_data_to_db(followers, username, "followers")
+#                 print(f"Collected {len(followers)} followers this session.")
+#             else:
+#                 print("No new followers collected this session.")
+#                 failed_attempts += 1
+
+#             print("Scraping followings...")
+#             set_proxy()  # Set a new proxy for each scraping session
+#             followings = get_profile_data(profile, scrape_duration, "followings", osintgram_instance, processed_usernames)
+#             if followings:
+#                 save_data_to_db(followings, username, "followings")
+#                 print(f"Collected {len(followings)} followings this session.")
+#             else:
+#                 print("No new followings collected this session.")
+#                 failed_attempts += 1
+
+#             if failed_attempts >= max_failed_attempts:
+#                 print("Maximum failed attempts reached. Stopping scraping.")
+#                 break
+
+#             # Pause between scraping sessions
+#             print(f"Pausing for {pause_duration / 60} minutes before next session.")
+#             time.sleep(pause_duration)
+
+#             # Re-login to ensure session validity
+#             if not instaloader_login(username, password):
+#                 print("Re-login failed.")
+#                 failed_attempts += 1
+#             else:
+#                 failed_attempts = 0  # Reset failed attempts after a successful login
+
+#         print("Completed scraping.")
+#         L.close()
+
+#         return JsonResponse({"message": "Scraping completed successfully."})
+
+
+
+
+# from .models import ScrapedData
+
+# def fetch_followers_data(request):
+#     if request.method == 'GET':
+#         username = request.session.get('username')
+#         if not username:
+#             return JsonResponse({'error': 'User not logged in or session expired.'}, status=400)
+
+#         followers_data = ScrapedData.objects.filter(profile_owner=username, data_type='followers')
+#         followers_list = list(followers_data.values(
+#             'username', 'user_id', 'full_name', 'profile_pic_url', 'is_verified',
+#             'is_private', 'biography', 'external_url', 'followers', 'followees',
+#             'email', 'phone_number'
+#         ))
+
+#         return JsonResponse({'followers_data': followers_list}, status=200)
+
+#     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+# def fetch_followings_data(request):
+#     if request.method == 'GET':
+#         username = request.session.get('username')
+#         if not username:
+#             return JsonResponse({'error': 'User not logged in or session expired.'}, status=400)
+
+#         followings_data = ScrapedData.objects.filter(profile_owner=username, data_type='followings')
+#         followings_list = list(followings_data.values(
+#             'username', 'user_id', 'full_name', 'profile_pic_url', 'is_verified',
+#             'is_private', 'biography', 'external_url', 'followers', 'followees',
+#             'email', 'phone_number'
+#         ))
+
+#         return JsonResponse({'followings_data': followings_list}, status=200)
+
+#     return JsonResponse({'error': 'Invalid request method.'}, status=400)
+
+
+# @csrf_exempt
+# def user_details(request):
+#     if request.method == 'GET':
+#         # Assuming the username is stored in the session
+#         username = request.session.get('username')
+
+#         if not username:
+#             return JsonResponse({'error': 'User not logged in.'}, status=400)
+
+#         try:
+#             profile = InstagramProfile.objects.get(username=username)
+
+#             profile_info = {
+#                 'username': profile.username,
+#                 'user_id': profile.user_id,
+#                 'full_name': profile.full_name,
+#                 'bio': profile.bio,
+#                 'profile_pic': profile.profile_pic,
+#                 'email': profile.email,
+#                 'phone': profile.phone,
+#                 'followers': profile.followers,
+#                 'followings': profile.followings,
+#                 'total_posts': profile.total_posts,
+#                 'external_url': profile.external_url,
+#             }
+
+#             return JsonResponse({'profile_data': profile_info}, status=200)
+#         except InstagramProfile.DoesNotExist:
+#             return JsonResponse({'error': 'Profile not found.'}, status=404)
+#         except Exception as e:
+#             return JsonResponse({'error': str(e)}, status=500)
+
+#     return JsonResponse({'error': 'Invalid HTTP method'}, status=405)
