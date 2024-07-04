@@ -309,7 +309,7 @@ def get_instagram_followers_details(request):
             logger.info(f"Saving followers data to database for user: {username}")
 
             for follower in followers:
-                user_info = cl.user_info(follower)
+                user_info = cl.user_info(follower.pk)
                 email = user_info.public_email or "None"
                 phone = user_info.public_phone_number or "None"
 
@@ -401,7 +401,7 @@ def get_instagram_followings_details(request):
             logger.info(f"Saving followings data to database for user: {username}")
 
             for following in followings:
-                user_info = cl.user_info(following)
+                user_info = cl.user_info(following.pk)
                 email = user_info.public_email or "None"
                 phone = user_info.public_phone_number or "None"
 
