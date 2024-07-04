@@ -283,14 +283,17 @@ def get_instagram_followers_details(request):
             user_id = cl.user_id_from_username(username)
             logger.info(f"Fetching user ID for user: {username}")
             followers = []
+            processed_user_ids = set()
             amount_to_fetch = 100
 
             while len(followers) < amount_to_fetch:
                 try:
                     results = cl.user_followers(user_id, amount=amount_to_fetch - len(followers))
-                    followers.extend(results.values())
+                    new_followers = [f for f in results.values() if f.pk not in processed_user_ids]
+                    followers.extend(new_followers)
+                    processed_user_ids.update(f.pk for f in new_followers)
                     logger.info(f"Fetched {len(followers)} followers so far for user: {username}")
-                    time.sleep(random.uniform(1, 3))  # Add random delay to mimic human behavior
+                    time.sleep(random.uniform(2, 5))  # Add random delay to mimic human behavior
 
                     if len(results) < (amount_to_fetch - len(followers)):
                         break
@@ -372,14 +375,17 @@ def get_instagram_followings_details(request):
             user_id = cl.user_id_from_username(username)
             logger.info(f"Fetching user ID for user: {username}")
             followings = []
+            processed_user_ids = set()
             amount_to_fetch = 100
 
             while len(followings) < amount_to_fetch:
                 try:
                     results = cl.user_following(user_id, amount=amount_to_fetch - len(followings))
-                    followings.extend(results)
+                    new_followers = [f for f in results.values() if f.pk not in processed_user_ids]
+                    followings.extend(new_followers)
+                    processed_user_ids.update(f.pk for f in new_followers)
                     logger.info(f"Fetched {len(followings)} followings so far for user: {username}")
-                    time.sleep(random.uniform(1, 3))  # Add random delay to mimic human behavior
+                    time.sleep(random.uniform(2, 5))  # Add random delay to mimic human behavior
 
                     if len(results) < (amount_to_fetch - len(followings)):
                         break
